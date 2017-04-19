@@ -1,0 +1,3 @@
+graft vp_sql/templates
+graft vp_sql/static
+include vp_sql/schema.sql

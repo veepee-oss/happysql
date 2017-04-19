@@ -1,0 +1,30 @@
+<p>Connection page</p>
+
+<div class="row">
+    <form class="col s12" ng-submit="getToken()">
+        <div class="row">
+            <div class="input-field col s6">
+                <input ng-model="user" id="user" name="user" type="text" class="validate">
+                <label for="user">Username</label>
+            </div>
+            <div class="input-field col s6">
+                <input ng-model="password" id="password" name="password" type="password" class="validate">
+                <label for="password">Password</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-field col s6">
+                <input ng-model="dbname" name="dbname" id="dbname" type="text" class="validate">
+                <label for="dbname">Database Name</label>
+            </div>
+            <div class="input-field col s6">
+                <input ng-model="server" name="server" placeholder="localhost" id="server" type="text"
+                       class="validate">
+                <label for="server">SQL Server</label>
+            </div>
+        </div>
+        <button class="btn waves-effect waves-light" type="submit" name="action">Submit
+            <i class="material-icons right">send</i>
+        </button>
+    </form>
+</div>

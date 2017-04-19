@@ -1,0 +1,30 @@
+Select query
+---
+tags:
+  - queries
+
+parameters:
+  - name: table
+    in: path
+    description: Table you wish to connect to
+    required: true
+    type: string
+  - name: select
+    in: query
+    description: All the fields you want to select
+    type: string
+  - name: field_name
+    in: query
+    description: where clause for the field
+    type: string
+  - name: order
+    in: query
+    description: order by clause
+    type: string
+
+responses:
+  200:
+    headers:
+      Content-Type:
+        type: application/json
+    description: Returns success or error depending on the query result

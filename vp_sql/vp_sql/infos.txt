@@ -1,0 +1,32 @@
+connect to db		: sqsh -S localhost -U sa
+password = 'sqlservp4sSw0rd'
+check if db is online   : sudo lsof -i :1433
+
+change password : sp_password @new = 'newpassword', @loginame = 'sa'
+
+DEPEDANCIES:
+
+
+sudo apt-get install freetds-dev --> if linux
+brew install freetds --> if macosx
+npm install redoc      -> dans static/
+
+
+TRANSACTION : -> A voir
+
+
+abbreviation  meaning
+eq 	      equals
+gte 	      greater than or equal
+gt 	      greater than
+lte 	      less than or equal
+lt 	      less than
+neq 	      not equal
+like 	      LIKE operator (use * in place of %)
+ilike 	      ILIKE operator (use * in place of %)
+in 	      one of a list of values e.g. ?a=in.1,2,3
+is 	      checking for exact equality (null,true,false)
+@@ 	      full-text search using to_tsquery
+@> 	      contains e.g. ?tags=@>.{example, new}
+<@ 	      contained in e.g. ?values=<@{1,2,3}
+not 	      negates another operator, see below

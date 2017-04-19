@@ -1,0 +1,27 @@
+Call user defined function
+---
+tags:
+  - queries
+
+parameters:
+  - name: function_name
+    in: path
+    description: Name of the function you wish to execute
+    required: true
+    type: string
+  - in: body
+    name: body
+    schema:
+      id: User_defined_functions
+      properties:
+        arg:
+          type: array
+          description: all parameters for request
+          example: "[1,2,3]"
+
+responses:
+  200:
+    headers:
+      Content-Type:
+        type: application/json
+    description: Returns success or error depending on the query result
