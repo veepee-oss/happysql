@@ -102,17 +102,18 @@ controller('editController', ['$scope', '$cookies', '$location', 'callDB', funct
     });
 
     $scope.submit = function() {
-        var headers = {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Authorization': $cookies.get('token')
-        };
+	console.log($scope.data);
+	var headers = {
+	    'Content-Type': 'application/x-www-form-urlencoded',
+	    'Authorization': $cookies.get('token')
+	};
 
-        var promise = callDB('PUT', "http://localhost:8080/" + $scope.table + "/" + $scope.id, headers, $scope.data);
+	var promise = callDB('PUT', "http://localhost:8080/" + $scope.table + "/" + $scope.id, headers, $scope.data);
 
-        promise.then(function(data) {
-            Materialize.toast('Object successfully changed !', 4000);
-        }, function(error) {
-            Materialize.toast(error, 4000);
-        });
-    };
+	promise.then(function(data) {
+	    Materialize.toast('Object successfully changed !', 4000);
+	}, function(error) {
+	    Materialize.toast(error, 4000);
+	});
+    }
 }]);
