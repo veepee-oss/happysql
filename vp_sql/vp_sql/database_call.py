@@ -34,17 +34,17 @@ def order_by(params):
     return final
 
 
-def get_views(cursor):
+def get_views(cursor, name, param):
     query = "SELECT * FROM sys.views"
     return (execute_request(cursor, query))
 
 
-def get_columns(cursor, table_name):
+def get_columns(cursor, table_name, param):
     query = "SELECT * FROM INFORMATION_SCHEMA.columns WHERE TABLE_NAME='" + table_name.split('.')[1] + "'"
     return (execute_request(cursor, query))
 
 
-def get_tables(cursor):
+def get_tables(cursor, name, param):
     query = "select table_schema, table_name from INFORMATION_SCHEMA.TABLES where TABLE_TYPE = 'BASE TABLE'"
     return (execute_request(cursor, query))
 
@@ -198,16 +198,18 @@ def delete(cursor, table, params):
     return ({"success": True})
 
 
-def update(cursor, table, params, fieldId):
+def update(cursor, table, params):
     query = "UPDATE " + table + " SET "
     print (params)
     for key, value in params.items():
         value = value.replace("'", "\\'")
         value = value.replace('"', '\\"')
+        if key == "Id":
+            continue
         query += key + "='" + value + "',"
     if len(params) != 0:
         query = query[:-1]
-    query += " WHERE Id=" + fieldId
+    query += " WHERE Id=" + params["Id"]
     print (query)
     try:
         cursor.execute(query)
@@ -216,7 +218,7 @@ def update(cursor, table, params, fieldId):
     return ({"success": True})
 
 
-def function_store(cursor, params):
+def function_store(cursor, name, params):
     try:
         cursor.execute(params["query"])
     except Exception as e:
