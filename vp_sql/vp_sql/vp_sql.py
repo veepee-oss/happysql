@@ -60,6 +60,7 @@ def change_credz():
     args = request.form.to_dict()
     co, token = cohandler.connect(params=args)
     if co is None:
+        abort(500)
         return jsonify({"success": False, "message": token})
     cursor = co.cursor()
     tables = database_call.get_tables(cursor, None, None)
