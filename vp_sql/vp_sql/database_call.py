@@ -21,6 +21,7 @@ def offset(params):
         final = "OFFSET " + params["offset"] + " ROWS FETCH NEXT 20 ROWS ONLY"
     return final
 
+
 def order_by(params):
     final = " ORDER BY "
     values = params["order"].split(",")
@@ -35,24 +36,12 @@ def order_by(params):
 
 def get_views(cursor):
     query = "SELECT * FROM sys.views"
-    print (query)
     return (execute_request(cursor, query))
 
 
 def get_columns(cursor, table_name):
     query = "SELECT * FROM INFORMATION_SCHEMA.columns WHERE TABLE_NAME='" + table_name.split('.')[1] + "'"
-
-    print (query)
     return (execute_request(cursor, query))
-
-
-
-# SELECT
-#   SCHEMA_NAME(schema_id) As SchemaName ,
-#     name As TableName
-#     from sys.tables
-#     ORDER BY name
-
 
 
 def get_tables(cursor):
@@ -67,7 +56,7 @@ def execute_request(cursor, query):
     try:
         cursor.execute(query)
     except Exception as e:
-        return {}
+        return {'success': False}
     keys = []
     for elem in cursor.description:
         keys.append(elem[0])
