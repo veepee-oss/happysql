@@ -29,6 +29,22 @@ CORS(app, supports_credentials=True)
 Compress(app)
 
 
+#db_call is the function call for database
+def call_db(token, db_call, table_name, params):
+    token = request.headers.get("Authorization")
+    co, token = cohandler.connect(token=token)
+    if token is None:
+        return jsonify({"success": False,
+                        "message": "you should reauthenticate"})
+    elif co is None:
+        return jsonify({"success": False, "message": "SQL connection limit "
+                                                     "reached"})
+    cursor = co.cursor()
+    value = db_call(cursor, table_name, params)
+    co.commit()
+    return jsonify(value)
+
+
 @app.route('/api/doc', methods=['GET'])
 def get_swagger_api():
     return render_template('api.html')
@@ -46,23 +62,14 @@ def change_credz():
     if co is None:
         return jsonify({"success": False, "message": token})
     cursor = co.cursor()
-    tables = database_call.get_tables(cursor)
+    tables = database_call.get_tables(cursor, None, None)
     return jsonify({"success": True, "token": token, "tables": tables})
 
 
 @app.route('/tables', methods=['GET'])
 def get_tables():
     token = request.headers.get("Authorization")
-    co, token = cohandler.connect(token=token)
-    if token is None:
-        return jsonify({"success": False,
-                        "message": "you should reauthenticate"})
-    elif co is None:
-        return jsonify({"success": False, "message": "SQL connection limit "
-                                                     "reached"})
-    cursor = co.cursor()
-    value = database_call.get_tables(cursor)
-    return jsonify(value)
+    return (call_db(token, database_call.get_tables, None, None))
 
 
 @app.route('/rpc/<function_name>', methods=['POST'])
@@ -74,16 +81,7 @@ def view_call(function_name):
     """
     token = request.headers.get("Authorization")
     args = request.form.to_dict()
-    co, token = cohandler.connect(token=token)
-    if token is None:
-        return jsonify({"success": False,
-                        "message": "you should reauthenticate"})
-    elif co is None:
-        return jsonify({"success": False, "message": "SQL connection limit "
-                                                     "reached"})
-    cursor = co.cursor()
-    value = database_call.function_call(cursor, function_name, args)
-    return jsonify(value)
+    return (call_db(token, database_call.function_call, function_name, args))
 
 
 @app.route('/rpc/views', methods=["GET"])
@@ -93,16 +91,7 @@ def get_views():
 
     """
     token = request.headers.get("Authorization")
-    co, token = cohandler.connect(token=token)
-    if token is None:
-        return jsonify({"success": False,
-                        "message": "you should reauthenticate"})
-    elif co is None:
-        return jsonify({"success": False, "message": "SQL connection limit "
-                                                     "reached"})
-    cursor = co.cursor()
-    value = database_call.get_views(cursor)
-    return jsonify(value)
+    return (call_db(token, database_call.get_views, None, None))
 
 
 @app.route('/rpc/new', methods=["POST"])
@@ -113,16 +102,7 @@ def add_stored_function():
     """
     token = request.headers.get("Authorization")
     args = request.form.to_dict()
-    co, token = cohandler.connect(token=token)
-    if token is None:
-        return jsonify({"success": False,
-                        "message": "you should reauthenticate"})
-    elif co is None:
-        return jsonify({"success": False, "message": "SQL connection limit "
-                                                     "reached"})
-    cursor = co.cursor()
-    value = database_call.function_store(cursor, args)
-    return jsonify(value)
+    return (call_db(token, database_call.function_store, None, params))
 
 
 @app.route('/<table>/columns', methods=['GET'])
@@ -132,15 +112,7 @@ def get_columns(table):
 
     """
     token = request.headers.get("Authorization")
-    co, token = cohandler.connect(token=token)
-    if token is None:
-        return jsonify({"success": False,
-                        "message": "you should reauthenticate"})
-    if co is None:
-        return jsonify({"success": False, "message": "SQL connection limit"})
-    cursor = co.cursor()
-    value = database_call.get_columns(cursor, table)
-    return jsonify(value)
+    return (call_db(token, database_call.get_columns, table, None))
 
 
 @app.route('/<table>/<fieldId>', methods=['PUT'])
@@ -151,16 +123,8 @@ def update_user(table, fieldId):
     """
     token = request.headers.get("Authorization")
     args = request.form.to_dict()
-    print (args)
-    co, token = cohandler.connect(token=token)
-    if token is None:
-        return jsonify({"success": False,
-                        "message": "you should reauthenticate"})
-    if co is None:
-        return jsonify({"success": False, "message": "SQL connection limit"})
-    cursor = co.cursor()
-    value = database_call.update(cursor, table, args, fieldId)
-    return jsonify(value)
+    args["fieldID"] = fieldId
+    return (call_db(token, database_call.update, table, args))
 
 
 @app.route('/<table>', methods=['DELETE'])
@@ -171,16 +135,7 @@ def delete(table):
     """
     token = request.headers.get("Authorization")
     args = request.form.to_dict()
-    print (args)
-    co, token = cohandler.connect(token=token)
-    if token is None:
-        return jsonify({"success": False,
-                        "message": "you should reauthenticate"})
-    if co is None:
-        return jsonify({"success": False, "message": "SQL connection limit"})
-    cursor = co.cursor()
-    value = database_call.delete(cursor, table, args)
-    return jsonify(value)
+    return (call_db(token, database_call.delete, table, args))
 
 
 @app.route('/<table>', methods=['GET'])
@@ -192,15 +147,7 @@ def select(table):
     """
     token = request.headers.get("Authorization")
     args = request.args.to_dict()
-    co, token = cohandler.connect(token=token)
-    if token is None:
-        return jsonify({"success": False,
-                        "message": "you should reauthenticate"})
-    if co is None:
-        return jsonify({"success": False, "message": "SQL connection limit"})
-    cursor = co.cursor()
-    value = database_call.select(cursor, table, args)
-    return jsonify(value)
+    return (call_db(token, database_call.select, table, args))
 
 
 @app.route("/spec")
