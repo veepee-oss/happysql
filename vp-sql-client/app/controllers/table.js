@@ -1,7 +1,5 @@
 'use strict';
 
-// ROW_NUMBER() OVER (ORDER BY ID)
-
 angular.module('myApp.table', ['ngCookies']).
 
 controller('TableCtrl', ['$scope', '$cookies', '$location', 'callDB', function($scope, $cookies, $location, callDB) {
@@ -14,7 +12,7 @@ controller('TableCtrl', ['$scope', '$cookies', '$location', 'callDB', function($
     $scope.order = "";
     $scope.reverse = false;
 
-    $scope.limit = 50;
+    $scope.limit = 20;
     $scope.offset = 0;
 
     $scope.sortBy = function(value) {
@@ -107,34 +105,4 @@ controller('editController', ['$scope', '$cookies', '$location', 'callDB', funct
 	    Materialize.toast(error, 4000);
 	});
     }
-}]).
-
-controller('viewController', ['$scope', '$cookies', '$location', 'callDB', function($scope, $cookies, $location, callDB) {
-    $scope.loc = $location.path().replace("/view", "");
-    $scope.view = $scope.loc.replace("/", "");
-    $scope.error = "";
-    $scope.datas = [];
-
-    var token = $cookies.get('token');
-
-    var datasPromise = callDB('GET', "http://localhost:8080" + $scope.loc, {'Authorization': token}, {});
-    datasPromise.then(function(data) {
-	$scope.datas = data
-    }, function(error) {
-	$scope.error = error;
-    });
-}]).
-
-controller('allViewsController', ['$scope', '$cookies', 'callDB', function($scope, $cookies, callDB) {
-    $scope.views = [];
-    $scope.error = "";
-
-    var token = $cookies.get('token');
-    var promise = callDB('GET', "http://localhost:8080/rpc/views", {'Authorization': token}, {});
-
-    promise.then(function(data) {
-	$scope.views = data
-    }, function(error) {
-	$scope.error = error;
-    });
 }]);

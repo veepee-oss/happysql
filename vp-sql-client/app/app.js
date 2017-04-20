@@ -6,7 +6,8 @@ angular.module('myApp', [
     'infinite-scroll',
     'myApp.version',
     'myApp.connection',
-    'myApp.table'
+    'myApp.table',
+    'myApp.view'
 ])
 
 .config(['$locationProvider', '$routeProvider', function($locationProvider, $routeProvider) {

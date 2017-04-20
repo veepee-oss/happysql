@@ -194,7 +194,7 @@ def delete(cursor, table, params):
     try:
         cursor.execute(query)
     except Exception as e:
-        return {}
+        return {"success": False}
     return ({"success": True})
 
 
@@ -212,7 +212,7 @@ def update(cursor, table, params, fieldId):
     try:
         cursor.execute(query)
     except Exception as e:
-        return {}
+        return {"success": False}
     return ({"success": True})
 
 
@@ -220,5 +220,5 @@ def function_store(cursor, params):
     try:
         cursor.execute(params["query"])
     except Exception as e:
-        return {}
+        return {"success": False}
     return ({"success": True})
