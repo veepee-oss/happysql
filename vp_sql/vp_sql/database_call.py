@@ -1,7 +1,19 @@
 #!/usr/bin/env python3
 
 from cohandler import TOKEN_DB_NAME
+from dateutil.parser import parse
 
+def is_date(string):
+    try:
+        a = parse(string)
+        try:
+            number = int(string)
+            return False
+        except:
+            pass
+        return a
+    except ValueError:
+        return False
 
 def check_type(key, params):
     typename = type(params[key]).__name__
@@ -35,27 +47,31 @@ def order_by(params):
 
 
 def get_views(cursor, name, param):
+    arguments = []
     query = "SELECT * FROM sys.views"
-    return (execute_request(cursor, query))
+    return (execute_request(cursor, query, arguments))
 
 
 def get_columns(cursor, table_name, param):
-    query = "SELECT * FROM INFORMATION_SCHEMA.columns WHERE TABLE_NAME='" + table_name.split('.')[1] + "'"
-    return (execute_request(cursor, query))
+    arguments = []
+    query = "SELECT * FROM INFORMATION_SCHEMA.columns WHERE TABLE_NAME = ?"
+    arguments.append(table_name.split('.')[1])
+    return (execute_request(cursor, query, arguments))
 
 
 def get_tables(cursor, name, param):
     query = "select table_schema, table_name from INFORMATION_SCHEMA.TABLES where TABLE_TYPE = 'BASE TABLE'"
-    return (execute_request(cursor, query))
+    return (execute_request(cursor, query, []))
 
 
-def execute_request(cursor, query):
+def execute_request(cursor, query, args):
     query = query.replace("--", "")
     query = query.replace("#", "")
-    print (query)
+    print (query + " | ", args)
     try:
-        cursor.execute(query)
+        cursor.execute(query, *args)
     except Exception as e:
+        print (e)
         return {'success': False}
     keys = []
     for elem in cursor.description:
@@ -71,11 +87,34 @@ def execute_request(cursor, query):
         result.append(value)
     return result
 
+# def execute_request(cursor, query):
+#     query = query.replace("--", "")
+#     query = query.replace("#", "")
+#     print (query)
+#     try:
+#         cursor.execute(query)
+#     except Exception as e:
+#         return {'success': False}
+#     keys = []
+#     for elem in cursor.description:
+#         keys.append(elem[0])
+
+#     result = []
+#     for row in cursor:
+#         i = 0
+#         value = {}
+#         for elem in row:
+#             value[keys[i]] = elem
+#             i = i + 1
+#         result.append(value)
+#     return result
+
 
 def function_call(cursor, function_name, params):
+    arguments = []
     request = "SELECT * FROM " + function_name + "(" + params.get("arg") + ")"
-    print (request)
-    return (execute_request(cursor, request))
+    print (request, arguments)
+    return (execute_request(cursor, request, arguments))
 
 
 def where(params):
@@ -154,17 +193,20 @@ def inner_join(table_name, join_params):
 
 
 def select(cursor, table_name, params):
+    arguments = []
     select_query = "SELECT "
     join_params = {}
     select_params = []
     if "limit" in params.keys() and "offset" not in params.keys():
-        select_query += "TOP(" + params["limit"] + ")"
+        select_query += "TOP(?)"
+        arguments.append(params["limit"])
     if 'select' in params.keys():
         select_params, join_params = separate_select_params(params["select"])
     if len(select_params) == 0:
-        select_params = '*'
+        select_query += "*,"
     for param in select_params:
-        select_query += param + ","
+        select_query += "?,"
+        arguments.append(param)
     select_query = select_query[:-1]
 
     select_query += " FROM " + table_name
@@ -173,14 +215,12 @@ def select(cursor, table_name, params):
     if "order" in params.keys():
         select_query += order_by(params)
     elif "offset" in params.keys():
-        select_query += "ORDER BY (SELECT 0) "
+        select_query += " ORDER BY (SELECT 0) "
     if "offset" in params.keys():
         select_query += offset(params)
 
     select_query += inner_join(table_name, join_params)
-
-    # print (select_query)
-    return (execute_request(cursor, select_query))
+    return (execute_request(cursor, select_query, arguments))
 
 
 def delete(cursor, table, params):
@@ -199,21 +239,27 @@ def delete(cursor, table, params):
 
 
 def update(cursor, table, params):
+    arguments = []
     query = "UPDATE " + table + " SET "
-    print (params)
     for key, value in params.items():
         value = value.replace("'", "\\'")
         value = value.replace('"', '\\"')
-        if key == "Id":
+        if key == "fieldID":
             continue
-        query += key + "='" + value + "',"
+        a = is_date(value)
+        if a != False:
+            value = a
+        query += key + " = ?,"
+        arguments.append(value)
     if len(params) != 0:
         query = query[:-1]
+    query += " FROM " + table + " "
     query += " WHERE Id=" + params["Id"]
-    print (query)
+    print (query + " | ", arguments)
     try:
-        cursor.execute(query)
+        cursor.execute(query, *arguments)
     except Exception as e:
+        print (e)
         return {"success": False}
     return ({"success": True})
 
@@ -222,5 +268,6 @@ def function_store(cursor, name, params):
     try:
         cursor.execute(params["query"])
     except Exception as e:
+        print (e)
         return {"success": False}
     return ({"success": True})

@@ -92,6 +92,7 @@ controller('editController', ['$scope', '$cookies', '$location', 'callDB', funct
     });
 
     $scope.submit = function() {
+	console.log($scope.data);
 	var headers = {
 	    'Content-Type': 'application/x-www-form-urlencoded',
 	    'Authorization': $cookies.get('token')
