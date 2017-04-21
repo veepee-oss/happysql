@@ -133,6 +133,7 @@ def delete(table):
     Delete query
 
     """
+    print ("lol")
     token = request.headers.get("Authorization")
     args = request.form.to_dict()
     return (call_db(token, database_call.delete, table, args))
