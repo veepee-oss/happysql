@@ -38,7 +38,7 @@ angular.module('myApp.connection', ['ngCookies'])
                 }
             }, function(error) {
                 $scope.error = error;
-                Materialize.toast('Connection  failure!', 4000);
+                Materialize.toast($scope.error.statusText, 4000);
             });
         }
 
