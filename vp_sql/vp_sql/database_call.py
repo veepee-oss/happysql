@@ -3,17 +3,19 @@
 from cohandler import TOKEN_DB_NAME
 from dateutil.parser import parse
 
+
 def is_date(string):
     try:
         a = parse(string)
         try:
             number = int(string)
             return False
-        except:
+        except Exception as e:
             pass
         return a
     except ValueError:
         return False
+
 
 def check_type(key, params):
     typename = type(params[key]).__name__
@@ -87,28 +89,6 @@ def execute_request(cursor, query, args):
         result.append(value)
     return result
 
-# def execute_request(cursor, query):
-#     query = query.replace("--", "")
-#     query = query.replace("#", "")
-#     print (query)
-#     try:
-#         cursor.execute(query)
-#     except Exception as e:
-#         return {'success': False}
-#     keys = []
-#     for elem in cursor.description:
-#         keys.append(elem[0])
-
-#     result = []
-#     for row in cursor:
-#         i = 0
-#         value = {}
-#         for elem in row:
-#             value[keys[i]] = elem
-#             i = i + 1
-#         result.append(value)
-#     return result
-
 
 def function_call(cursor, function_name, params):
     arguments = []
@@ -150,7 +130,7 @@ def separate_select_params(params):
     join = False
     tmp = ""
     for c in params:
-        if c == ',' and join == False:
+        if c == ',' and not join:
             all_params.append(tmp)
             tmp = ""
         else:
@@ -177,7 +157,6 @@ def separate_select_params(params):
     return select_params, join_params
 
 
-#inner join (select director from LOL) on Rois_de_France.id = Director.(find_foreign_key)
 def inner_join(table_name, join_params):
     query = ""
     if len(join_params) == 0:
@@ -225,7 +204,6 @@ def select(cursor, table_name, params):
 
 def delete(cursor, table, params):
     query = "DELETE FROM " + table + " WHERE "
-    print (params)
     for key, value in params.items():
         query += key + "=" + value + " and "
     if len(params) != 0:
@@ -247,7 +225,7 @@ def update(cursor, table, params):
         if key == "fieldID":
             continue
         a = is_date(value)
-        if a != False:
+        if not a:
             value = a
         query += key + " = ?,"
         arguments.append(value)

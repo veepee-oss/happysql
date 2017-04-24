@@ -8,9 +8,9 @@ angular.module('myApp', [
     'myApp.connection',
     'myApp.table',
     'myApp.view'
-])
+]).
 
-.config(['$locationProvider', '$routeProvider', function($locationProvider, $routeProvider) {
+config(['$locationProvider', '$routeProvider', function($locationProvider, $routeProvider) {
     $locationProvider.hashPrefix('!');
     $routeProvider
 	.when('/tables', {

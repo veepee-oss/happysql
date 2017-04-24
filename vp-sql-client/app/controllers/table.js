@@ -22,9 +22,9 @@ controller('TableCtrl', ['$scope', '$cookies', '$location', 'callDB', function($
         console.log(value);
     };
 
-    var token = $cookies.get('token');
+    $scope.token = $cookies.get('token');
 
-    var columnPromise = callDB('GET', "http://localhost:8080" + $scope.loc + "/columns", {'Authorization': token}, {});
+    var columnPromise = callDB('GET', "http://localhost:8080" + $scope.loc + "/columns", {'Authorization': $scope.token}, {});
     columnPromise.then(function(data) {
         $scope.columns = data;
         if ($scope.loaded == false) {
@@ -43,7 +43,7 @@ controller('TableCtrl', ['$scope', '$cookies', '$location', 'callDB', function($
     $scope.addMoreItems = function() {
         var datasPromise = callDB('GET', "http://localhost:8080" + $scope.loc +
             "?limit=" + $scope.limit + "&offset=" + $scope.offset,
-            {'Authorization': token}, {});
+            {'Authorization': $scope.token}, {});
         $scope.offset += $scope.limit
         datasPromise.then(function(data) {
             if (data.length === 0) {

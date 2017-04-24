@@ -29,16 +29,13 @@ CORS(app, supports_credentials=True)
 Compress(app)
 
 
-#db_call is the function call for database
+# db_call is the function call for database
 def call_db(token, db_call, table_name, params):
     token = request.headers.get("Authorization")
     co, token = cohandler.connect(token=token)
-    if token is None:
-        return jsonify({"success": False,
-                        "message": "you should reauthenticate"})
-    elif co is None:
-        return jsonify({"success": False, "message": "SQL connection limit "
-                                                     "reached"})
+    if token is None or co is None:
+        abort(500)
+        return jsonify({"success": False, "message": token})
     cursor = co.cursor()
     value = db_call(cursor, table_name, params)
     co.commit()
@@ -134,7 +131,6 @@ def delete(table):
     Delete query
 
     """
-    print ("lol")
     token = request.headers.get("Authorization")
     args = request.form.to_dict()
     return (call_db(token, database_call.delete, table, args))

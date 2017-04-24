@@ -29,7 +29,10 @@ def connect(token=None, params=dict()):
     try:
         if token is not None:
             token = token.encode('utf-8')
-            tok = jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
+            try:
+                tok = jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
+            except Exception as e:
+                return None, "you should reauthenticate"
         else:
             try:
                 tok = dict()
