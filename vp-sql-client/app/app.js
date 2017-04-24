@@ -10,8 +10,9 @@ angular.module('myApp', [
     'myApp.view'
 ]).
 
-config(['$locationProvider', '$routeProvider', function($locationProvider, $routeProvider) {
+config(['$locationProvider', '$routeProvider', '$httpProvider', function($locationProvider, $routeProvider, $httpProvider) {
     $locationProvider.hashPrefix('!');
+    $httpProvider.interceptors.push('my500Detector');
     $routeProvider
         .when('/tables', {
             templateUrl: 'views/all_tables.html',
@@ -37,5 +38,22 @@ config(['$locationProvider', '$routeProvider', function($locationProvider, $rout
             templateUrl: 'views/view.html',
             controller: 'viewController'
         })
-        .otherwise({redirectTo: '/connection'});
-}]);
+        .when('/error', {
+            templateUrl: 'views/error.html'
+        })
+        .otherwise({redirectTo: '/error'});
+}]).
+
+factory('my500Detector', function($location, $q) {
+    return {
+        responseError: function(response) {
+            if(response.status === 500) {
+                $location.path('/error');
+                return $q.reject(response);
+            }
+            else {
+                return $q.reject(response);
+            }
+        }
+    };
+});
