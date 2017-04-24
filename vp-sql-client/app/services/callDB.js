@@ -7,8 +7,8 @@ factory('callDB', ['$http', '$q', function($http, $q) {
     return function(method, url, headers, data) {
 
 	return $q(function(resolve, reject) {
-	    setTimeout(function() {
 
+	    setTimeout(function() {
 		$http({
 		    method: method,
 		    url: url,

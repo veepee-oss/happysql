@@ -1,47 +1,47 @@
 <div>
-    <h3>Table : {{table}}</h3>
+  <h3>Table : {{table}}</h3>
+  <p>{{error}}</p>
+  <br/>
+
+  <div class="preloader-background">
+    <h3>{{table}}</h3>
     <p>{{error}}</p>
-    <br/>
-
-    <div class="preloader-background">
-        <h3>{{table}}</h3>
-        <p>{{error}}</p>
-        <div class="preloader-wrapper big active">
-            <div class="spinner-layer spinner-red-only">
-                <div class="circle-clipper left">
-                    <div class="circle"></div>
-                </div>
-                <div class="gap-patch">
-                    <div class="circle"></div>
-                </div>
-                <div class="circle-clipper right">
-                    <div class="circle"></div>
-                </div>
-            </div>
+    <div class="preloader-wrapper big active">
+      <div class="spinner-layer spinner-red-only">
+        <div class="circle-clipper left">
+          <div class="circle"></div>
         </div>
+        <div class="gap-patch">
+          <div class="circle"></div>
+        </div>
+        <div class="circle-clipper right">
+          <div class="circle"></div>
+        </div>
+      </div>
     </div>
+  </div>
 
-    Search: <input ng-model="query" />
-    <div infinite-scroll="addMoreItems()">
-        <table class="highlight responsive-table">
-            <thead>
-            <tr>
-                <th ng-repeat="column in columns">
-                    <!-- <button class="btn waves-effect waves-light" ng-click="sortBy(column.name)">{{column.name}}</button> -->
-                    {{column.COLUMN_NAME}}
-                </th>
-                <th>Delete</th>
-                <th>Modify</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr ng-repeat="data in datas | filter:query | orderBy: order:reverse">
-                <td ng-repeat="column in columns"> {{data[column.COLUMN_NAME]}} </td>
-                <td><a class="waves-effect waves-light btn" ng-click="deleteElement(data.Id)"><i class="material-icons">delete</i></a></td>
-                <td><a class="waves-effect waves-light btn" ng-href="#!/table/{{table}}/{{data.Id}}"><i class="material-icons">description</i></a></td>
-            </tr>
-            </tbody>
-        </table>
-        <a class="waves-effect waves-light btn" ng-click="addMoreItems()"><i class="material-icons">forward_5</i></a>
-    </div>
+  Search: <input ng-model="query" />
+  <div infinite-scroll="addMoreItems()">
+    <table class="highlight responsive-table">
+      <thead>
+        <tr>
+          <th ng-repeat="column in columns">
+            <!-- <button class="btn waves-effect waves-light" ng-click="sortBy(column.name)">{{column.name}}</button> -->
+            {{column.COLUMN_NAME}}
+          </th>
+          <th>Delete</th>
+          <th>Modify</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="data in datas | filter:query | orderBy: order:reverse">
+          <td ng-repeat="column in columns"> {{data[column.COLUMN_NAME]}} </td>
+          <td><a class="waves-effect waves-light btn" ng-click="deleteElement(data.Id)"><i class="material-icons">delete</i></a></td>
+          <td><a class="waves-effect waves-light btn" ng-href="#!/table/{{table}}/{{data.Id}}"><i class="material-icons">description</i></a></td>
+        </tr>
+      </tbody>
+    </table>
+    <a class="waves-effect waves-light btn" ng-click="addMoreItems()"><i class="material-icons">forward_5</i></a>
+  </div>
 </div>
