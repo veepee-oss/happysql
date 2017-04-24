@@ -41,7 +41,7 @@ config(['$locationProvider', '$routeProvider', '$httpProvider', function($locati
         .when('/error', {
             templateUrl: 'views/error.html'
         })
-        .otherwise({redirectTo: '/error'});
+        .otherwise({redirectTo: '/connection'});
 }]).
 
 factory('my500Detector', function($location, $q) {
