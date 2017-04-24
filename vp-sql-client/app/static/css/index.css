@@ -15,7 +15,7 @@ l.side-nav.fixed li {
 #page-footer {
     position: fixed;
     /*height: 175px;*/
-    bottom: 0px;
+    bottom: 60px;
     left: 0px;
     right: 0px;
     margin-bottom: 0px;
