@@ -28,17 +28,11 @@ angular.module('myApp.connection', ['ngCookies'])
                 $scope.password = '';
                 $scope.server = '';
                 $scope.dbname = '';
-                if ($scope.datas.success == false) {
-                    Materialize.toast('Connection  failure!', 4000);
-                    Materialize.toast($scope.datas.message, 4000);
-                }
-                else {
-                    $cookies.put('token', $scope.datas.token);
-                    Materialize.toast('Connection  successful!', 4000);
-                }
+                $cookies.put('token', $scope.datas.token);
+                Materialize.toast('Connection  successful!', 4000);
             }, function(error) {
                 $scope.error = error;
-                Materialize.toast($scope.error.statusText, 4000);
+                Materialize.toast('Connection failed!', 4000);
             });
         }
 
