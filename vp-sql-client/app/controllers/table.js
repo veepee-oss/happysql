@@ -13,6 +13,8 @@ controller('TableCtrl', ['$scope', '$cookies', '$location', 'callDB', function($
     $scope.reverse = false;
     $scope.loaded = false;
 
+    $scope.lastCalls = [];
+    
     $scope.limit = 20;
     $scope.offset = 0;
 
@@ -24,7 +26,9 @@ controller('TableCtrl', ['$scope', '$cookies', '$location', 'callDB', function($
 
     $scope.token = $cookies.get('token');
 
-    var columnPromise = callDB('GET', "http://localhost:8080" + $scope.loc + "/columns", {'Authorization': $scope.token}, {});
+    var call = "http://localhost:8080" + $scope.loc + "/columns";
+    var columnPromise = callDB('GET', call, {'Authorization': $scope.token}, {});
+    $scope.lastCalls.push("GET " + call);
     columnPromise.then(function(data) {
         $scope.columns = data;
         if ($scope.loaded == false) {
@@ -41,9 +45,10 @@ controller('TableCtrl', ['$scope', '$cookies', '$location', 'callDB', function($
     });
 
     $scope.addMoreItems = function() {
-        var datasPromise = callDB('GET', "http://localhost:8080" + $scope.loc +
-            "?limit=" + $scope.limit + "&offset=" + $scope.offset,
-            {'Authorization': $scope.token}, {});
+	var call = "http://localhost:8080" + $scope.loc + "?limit=" + $scope.limit + "&offset=" + $scope.offset;
+        var datasPromise = callDB('GET', call, {'Authorization': $scope.token}, {});
+	$scope.lastCalls.push("GET " + call);
+	console.log($scope.lastCalls);
         $scope.offset += $scope.limit
         datasPromise.then(function(data) {
             if (data.length === 0) {
@@ -64,7 +69,9 @@ controller('TableCtrl', ['$scope', '$cookies', '$location', 'callDB', function($
         }
         var headers = {'Authorization': $scope.token, 'Content-Type': 'application/x-www-form-urlencoded'};
         var data = {'Id': index}
-        var promise = callDB('DELETE', "http://localhost:8080/" + $scope.table, headers, data)
+ 	var call = "http://localhost:8080/" + $scope.table;
+	var promise = callDB('DELETE', call, headers, data)
+	$scope.lastCalls.push("DELETE " + call);
         promise.then(function(data) {
             Materialize.toast('Object successfully destroyed !', 4000);
         }, function(error) {
