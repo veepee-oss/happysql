@@ -69,7 +69,7 @@ def get_tables(cursor, name, param):
 def execute_request(cursor, query, args):
     query = query.replace("--", "")
     query = query.replace("#", "")
-    print (query + " | ", args)
+    print(query + " | ", args)
     try:
         cursor.execute(query, *args)
     except Exception as e:
@@ -246,6 +246,6 @@ def function_store(cursor, name, params):
     try:
         cursor.execute(params["query"])
     except Exception as e:
-        print (e)
+        print(e)
         return {"success": False}
     return ({"success": True})

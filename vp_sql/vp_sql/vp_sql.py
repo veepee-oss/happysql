@@ -35,7 +35,6 @@ def call_db(token, db_call, table_name, params):
     co, token = cohandler.connect(token=token)
     if token is None or co is None:
         abort(500)
-        return jsonify({"success": False, "message": token})
     cursor = co.cursor()
     value = db_call(cursor, table_name, params)
     co.commit()
@@ -58,7 +57,6 @@ def change_credz():
     co, token = cohandler.connect(params=args)
     if co is None:
         abort(500)
-        return jsonify({"success": False, "message": token})
     cursor = co.cursor()
     tables = database_call.get_tables(cursor, None, None)
     return jsonify({"success": True, "token": token, "tables": tables})
