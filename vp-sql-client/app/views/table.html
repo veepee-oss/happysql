@@ -1,10 +1,11 @@
 <div>
-  <div class="col s3">
-    <code ng-repeat="call in lastCalls">
-      {{call}}<br/>
-    </code>
+  <div class="col s3 grey">
+    <div ng-repeat="call in lastCalls">
+      <pre><code>{{call}}</code></pre>
+      <!-- <input type="text" value="{{call}}"/> -->
+    </div>
   </div>
-  <div class="col s9">
+  <div class="col s8">
     <h3>Table : {{table}}</h3>
     <p>{{error}}</p>
     <br/>
