@@ -2,15 +2,15 @@
 
 angular.module('myApp').
 
-factory('callDB', ['$http', '$q', function($http, $q) {
+factory('callDB', ['$http', '$q', '__env', function($http, $q, __env) {
 
     return function(method, url, headers, data) {
 
 	return $q(function(resolve, reject) {
-
 	    setTimeout(function() {
 		$http({
 		    method: method,
+		    // url: __env.apiUrl + __env.baseUrl + url,
 		    url: url,
 		    headers: headers,
 		    data: $.param(data)

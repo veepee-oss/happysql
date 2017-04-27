@@ -23,10 +23,10 @@ angular.module('myApp.table', ['ngCookies']).controller('TableCtrl', ['$scope', 
     };
 
     $scope.token = $cookies.get('token');
-
-    var call = "http://localhost:8080" + $scope.loc + "/columns";
-    var columnPromise = callDB('GET', call, {'Authorization': $scope.token}, {});
-    $scope.lastCalls.push("GET " + call);
+    var url = "http://localhost:8080";
+    var columnCall = url + $scope.loc + "/columns";
+    var columnPromise = callDB('GET', columnCall, {'Authorization': $scope.token}, {});
+    $scope.lastCalls.push("GET " + columnCall);
     columnPromise.then(function(data) {
         $scope.columns = data;
         if ($scope.loaded === false) {

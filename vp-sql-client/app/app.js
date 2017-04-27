@@ -1,5 +1,11 @@
 'use strict';
 
+var env = {};
+
+if (window) {
+    Object.assign(env, window.__env);
+}
+
 // Declare app level module which depends on views, and components
 angular.module('myApp', [
     'ngRoute',
@@ -56,4 +62,6 @@ factory('my500Detector', function($location, $q) {
             }
         }
     };
-});
+}).
+
+constant('__env', env);
