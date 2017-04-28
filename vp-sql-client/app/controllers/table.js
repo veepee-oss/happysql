@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('myApp.table', ['ngCookies']).controller('TableCtrl', ['$scope', '$cookies', '$location', 'callDB', function ($scope, $cookies, $location, callDB) {
+angular.module('myApp.table', ['ngCookies', 'ngclipboard']).controller('TableCtrl', ['$scope', '$cookies', '$location', 'callDB', function ($scope, $cookies, $location, callDB) {
     $scope.loc = $location.path().replace("/table", "");
     $scope.table = $scope.loc.replace("/", "");
     $scope.error = "";
