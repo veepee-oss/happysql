@@ -4,11 +4,11 @@
             <br><br><br><br><br><br>
             <div ng-repeat="call in lastCalls">
                 <div class="col s8">
-                    <input id="foo{{$index + 1}}" type="text" value="{{call}}">
+                    <input id="call{{$index + 1}}" type="text" value="{{call}}">
                 </div>
                 <div class="col s1">
                 <button class="btn btn-floating waves-effect waves-light"
-                        ngclipboard data-clipboard-target="#foo{{$index + 1}}"
+                        ngclipboard data-clipboard-target="#call{{$index + 1}}"
                         onclick="Materialize.toast('Copied!', 1000)">
                     <i class="petite material-icons">library_books</i>
                 </button>
