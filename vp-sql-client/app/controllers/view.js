@@ -10,8 +10,8 @@ controller('viewController', ['$scope', '$cookies', '$location', 'callDB', funct
     $scope.datas = [];
 
     var token = $cookies.get('token');
-
-    var datasPromise = callDB('GET', "http://localhost:8080" + $scope.loc, {'Authorization': token}, {});
+    var call = $scope.view;
+    var datasPromise = callDB('GET', call, {'Authorization': token}, {});
     datasPromise.then(function(data) {
 	$scope.datas = data
     }, function(error) {
@@ -24,12 +24,12 @@ controller('allViewsController', ['$scope', '$cookies', 'callDB', function($scop
     $scope.error = "";
 
     var token = $cookies.get('token');
-    var promise = callDB('GET', "http://localhost:8080/rpc/views", {'Authorization': token}, {});
+    var call = "rpc/views";
+    var promise = callDB('GET', call, {'Authorization': token}, {});
 
     promise.then(function(data) {
-	$scope.views = data
+	$scope.views = data;
     }, function(error) {
 	$scope.error = error;
     });
 }]);
-

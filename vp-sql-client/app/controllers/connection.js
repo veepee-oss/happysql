@@ -20,8 +20,8 @@ angular.module('myApp.connection', ['ngCookies'])
                 dbname: $scope.dbname,
                 server: $scope.server
             };
-            var promise = callDB('POST', "http://localhost:8080/change_credz",
-                {'Content-Type': 'application/x-www-form-urlencoded'}, data);
+	    var call = "change_credz";
+            var promise = callDB('POST', call, {'Content-Type': 'application/x-www-form-urlencoded'}, data);
             promise.then(function(data) {
                 $scope.datas = data;
                 $scope.user = '';

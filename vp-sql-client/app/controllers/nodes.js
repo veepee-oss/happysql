@@ -20,4 +20,3 @@ vis.selectAll("circle .nodes")
     .attr("cy", function(d) { return d.y; })
     .attr("r", "10px")
     // .attr("fill", "black")
-
