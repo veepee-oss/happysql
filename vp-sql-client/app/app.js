@@ -47,6 +47,9 @@ config(['$locationProvider', '$routeProvider', '$httpProvider', function($locati
         .when('/error', {
             templateUrl: 'views/error.html'
         })
+	.when('/test', {
+	    templateUrl: 'views/d3test.html'
+	})
         .otherwise({redirectTo: '/connection'});
 }]).
 
