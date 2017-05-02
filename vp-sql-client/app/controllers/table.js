@@ -122,5 +122,5 @@ angular.module('myApp.table', ['ngCookies', 'ngclipboard']).controller('TableCtr
         }, function (error) {
             Materialize.toast('Operation failed!', 4000);
         });
-    }
+    };
 }]);

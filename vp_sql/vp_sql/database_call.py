@@ -30,7 +30,8 @@ def check_type(key, params):
 
 def offset(params):
     if "limit" in params.keys():
-        final = "OFFSET " + params["offset"] + " ROWS FETCH NEXT " + params["limit"] + " ROWS ONLY"
+        final = "OFFSET " + params["offset"] + " ROWS FETCH NEXT " + params[
+            "limit"] + " ROWS ONLY"
     else:
         final = "OFFSET " + params["offset"] + " ROWS FETCH NEXT 20 ROWS ONLY"
     return final
@@ -51,19 +52,20 @@ def order_by(params):
 def get_views(cursor, name, param):
     arguments = []
     query = "SELECT * FROM sys.views"
-    return (execute_request(cursor, query, arguments))
+    return execute_request(cursor, query, arguments)
 
 
 def get_columns(cursor, table_name, param):
     arguments = []
     query = "SELECT * FROM INFORMATION_SCHEMA.columns WHERE TABLE_NAME = ?"
     arguments.append(table_name.split('.')[1])
-    return (execute_request(cursor, query, arguments))
+    return execute_request(cursor, query, arguments)
 
 
 def get_tables(cursor, name, param):
-    query = "select table_schema, table_name from INFORMATION_SCHEMA.TABLES where TABLE_TYPE = 'BASE TABLE'"
-    return (execute_request(cursor, query, []))
+    query = "select table_schema, table_name from INFORMATION_SCHEMA.TABLES " \
+            "where TABLE_TYPE = 'BASE TABLE'"
+    return execute_request(cursor, query, [])
 
 
 def execute_request(cursor, query, args):
@@ -73,7 +75,7 @@ def execute_request(cursor, query, args):
     try:
         cursor.execute(query, *args)
     except Exception as e:
-        print (e)
+        print(e)
         return {'success': False}
     keys = []
     for elem in cursor.description:
@@ -93,8 +95,8 @@ def execute_request(cursor, query, args):
 def function_call(cursor, function_name, params):
     arguments = []
     request = "SELECT * FROM " + function_name + "(" + params.get("arg") + ")"
-    print (request, arguments)
-    return (execute_request(cursor, request, arguments))
+    print(request, arguments)
+    return execute_request(cursor, request, arguments)
 
 
 def where(params):
@@ -199,7 +201,7 @@ def select(cursor, table_name, params):
         select_query += offset(params)
 
     select_query += inner_join(table_name, join_params)
-    return (execute_request(cursor, select_query, arguments))
+    return execute_request(cursor, select_query, arguments)
 
 
 def delete(cursor, table, params):
@@ -208,12 +210,12 @@ def delete(cursor, table, params):
         query += key + "=" + value + " and "
     if len(params) != 0:
         query = query[:-5]
-    print (query)
+    print(query)
     try:
         cursor.execute(query)
     except Exception as e:
         return {"success": False}
-    return ({"success": True})
+    return {"success": True}
 
 
 def update(cursor, table, params):
@@ -233,13 +235,13 @@ def update(cursor, table, params):
         query = query[:-1]
     query += " FROM " + table + " "
     query += " WHERE Id=" + params["Id"]
-    print (query + " | ", arguments)
+    print(query + " | ", arguments)
     try:
         cursor.execute(query, *arguments)
     except Exception as e:
-        print (e)
+        print(e)
         return {"success": False}
-    return ({"success": True})
+    return {"success": True}
 
 
 def function_store(cursor, name, params):
@@ -248,4 +250,4 @@ def function_store(cursor, name, params):
     except Exception as e:
         print(e)
         return {"success": False}
-    return ({"success": True})
+    return {"success": True}
