@@ -225,7 +225,7 @@ def update(cursor, table, params):
         if key == "fieldID":
             continue
         a = is_date(value)
-        if not a:
+        if a:
             value = a
         query += key + " = ?,"
         arguments.append(value)
