@@ -80,7 +80,6 @@ def execute_request(cursor, query, args):
     keys = []
     for elem in cursor.description:
         keys.append(elem[0])
-
     result = []
     for row in cursor:
         i = 0
@@ -234,7 +233,8 @@ def update(cursor, table, params):
     if len(params) != 0:
         query = query[:-1]
     query += " FROM " + table + " "
-    query += " WHERE Id=" + params["Id"]
+    query += " WHERE Id=" + params["fieldId"] # <----- change this line
+                                              # need to put the fieldID key and vlue
     print(query + " | ", arguments)
     try:
         cursor.execute(query, *arguments)
