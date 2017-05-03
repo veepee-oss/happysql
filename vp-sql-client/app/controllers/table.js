@@ -23,8 +23,9 @@ angular.module('myApp.table', ['ngCookies', 'ngclipboard']).controller('TableCtr
     };
 
     $scope.token = $cookies.get('token');
-    var url = "http://localhost:8080";
-    var columnCall = url + $scope.loc + "/columns";
+    // var url = "http://localhost:8080";
+    // var columnCall = url + $scope.loc + "/columns";
+    var columnCall = $scope.table + "/columns";
     var columnPromise = callDB('GET', columnCall, {'Authorization': $scope.token}, {});
     $scope.lastCalls.push("GET " + columnCall);
     columnPromise.then(function(data) {
@@ -43,7 +44,8 @@ angular.module('myApp.table', ['ngCookies', 'ngclipboard']).controller('TableCtr
     });
 
     $scope.addMoreItems = function() {
-	var call = "http://localhost:8080" + $scope.loc + "?limit=" + $scope.limit + "&offset=" + $scope.offset;
+	// var call = "http://localhost:8080" + $scope.loc + "?limit=" + $scope.limit + "&offset=" + $scope.offset;
+	var call = $scope.table + "?limit=" + $scope.limit + "&offset=" + $scope.offset;
         var datasPromise = callDB('GET', call, {'Authorization': $scope.token}, {});
 	$scope.lastCalls.push("GET " + call);
 	console.log($scope.lastCalls);
@@ -67,7 +69,8 @@ angular.module('myApp.table', ['ngCookies', 'ngclipboard']).controller('TableCtr
         }
         var headers = {'Authorization': $scope.token, 'Content-Type': 'application/x-www-form-urlencoded'};
         var data = {'Id': index}
- 	var call = "http://localhost:8080/" + $scope.table;
+ 	// var call = "http://localhost:8080/" + $scope.table;
+	var call = $scope.table;
 	var promise = callDB('DELETE', call, headers, data)
 	$scope.lastCalls.push("DELETE " + call);
         promise.then(function(data) {
@@ -81,7 +84,8 @@ angular.module('myApp.table', ['ngCookies', 'ngclipboard']).controller('TableCtr
     $scope.error = "";
 
     var token = $cookies.get('token');
-    var promise = callDB('GET', "http://localhost:8080/tables", {'Authorization': token}, {});
+    var call = "tables"
+    var promise = callDB('GET', call, {'Authorization': token}, {});
 
     promise.then(function (data) {
         $scope.tables = data
@@ -95,7 +99,8 @@ angular.module('myApp.table', ['ngCookies', 'ngclipboard']).controller('TableCtr
     $scope.id = split[3];
 
     var token = $cookies.get('token');
-    var promise = callDB('GET', "http://localhost:8080/" + $scope.table + "?Id=" + $scope.id, {'Authorization': token}, {});
+    var call = $scope.table + "?Id=" + $scope.id;
+    var promise = callDB('GET', call, {'Authorization': token}, {});
     promise.then(function (data) {
         $scope.data = data[0]
     }, function (error) {
@@ -109,7 +114,8 @@ angular.module('myApp.table', ['ngCookies', 'ngclipboard']).controller('TableCtr
             'Authorization': $cookies.get('token')
         };
 
-        var promise = callDB('PUT', "http://localhost:8080/" + $scope.table + "/" + $scope.id, headers, $scope.data);
+	var call = $scope.table + "/" + $scope.id
+        var promise = callDB('PUT', call, headers, $scope.data);
 
         promise.then(function (data) {
             Materialize.toast('Object successfully changed !', 4000);
