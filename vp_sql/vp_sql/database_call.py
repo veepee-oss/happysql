@@ -1,7 +1,29 @@
 #!/usr/bin/env python3
 
+import logging
 from cohandler import TOKEN_DB_NAME
 from dateutil.parser import parse
+
+
+def get_constraint(cursor, table_name):
+    if table_name is not None:
+        query = "SELECT TABLE_NAME, TABLE_SCHEMA, COLUMN_NAME, CONSTRAINT_NAME " \
+                "FROM INFORMATION_SCHEMA.CONSTRAINT_COLUMN_USAGE"
+        sql_response = execute_request(cursor, query, [])
+        for i in sql_response:
+            if i['CONSTRAINT_NAME'].find(
+                                        "PK__" +
+                                        table_name.replace(i['TABLE_SCHEMA'] + ".",
+                                                           "",
+                                                           1)
+                                        + "__") != -1:
+                if i['TABLE_NAME'] == table_name.replace(i['TABLE_SCHEMA'] + ".",
+                                                         "",
+                                                         1):
+                    logging.debug(i['COLUMN_NAME'])
+                    return i['COLUMN_NAME']
+        logging.warn("Primary key not found! Table is in read only mode.")
+    return ""
 
 
 def is_date(string):
@@ -168,7 +190,8 @@ def inner_join(table_name, join_params):
             query += val + ","
         if len(value) != 0:
             query = query[:-1]
-        query += " FROM " + key + ") on " + table_name + ".id = " + key + ".fk_id"
+        query += " FROM " + key + ") on " + table_name + ".id = " + key + \
+                 ".fk_id"
     return query
 
 
