@@ -13,7 +13,8 @@ angular.module('myApp', [
     'myApp.version',
     'myApp.connection',
     'myApp.table',
-    'myApp.view'
+    'myApp.view',
+    'myApp.nodes'
 ]).
 
 config(['$locationProvider', '$routeProvider', '$httpProvider', function($locationProvider, $routeProvider, $httpProvider) {
@@ -48,7 +49,8 @@ config(['$locationProvider', '$routeProvider', '$httpProvider', function($locati
             templateUrl: 'views/error.html'
         })
 	.when('/test', {
-	    templateUrl: 'views/d3test.html'
+	    templateUrl: 'views/d3test.html',
+	    controller: 'nodesController'
 	})
         .otherwise({redirectTo: '/connection'});
 }]).
