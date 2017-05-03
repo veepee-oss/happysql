@@ -10,6 +10,7 @@ angular.module('myApp.table', ['ngCookies', 'ngclipboard']).controller('TableCtr
     $scope.order = "";
     $scope.reverse = false;
     $scope.loaded = false;
+    $scope.guid = "";
 
     $scope.lastCalls = [];
     
@@ -28,8 +29,10 @@ angular.module('myApp.table', ['ngCookies', 'ngclipboard']).controller('TableCtr
     var columnCall = $scope.table + "/columns";
     var columnPromise = callDB('GET', columnCall, {'Authorization': $scope.token}, {});
     $scope.lastCalls.push("GET " + columnCall);
-    columnPromise.then(function(data) {
-        $scope.columns = data;
+    columnPromise.then(function(response) {
+        $scope.columns = response.data;
+        $scope.guid = response.headers('x-guid');
+        console.log($scope.guid);
         if ($scope.loaded === false) {
             $('.preloader-background').delay(1700).fadeOut('slow');
 
@@ -49,12 +52,12 @@ angular.module('myApp.table', ['ngCookies', 'ngclipboard']).controller('TableCtr
         var datasPromise = callDB('GET', call, {'Authorization': $scope.token}, {});
 	$scope.lastCalls.push("GET " + call);
 	console.log($scope.lastCalls);
-        $scope.offset += $scope.limit
-        datasPromise.then(function(data) {
-            if (data.length === 0) {
+        $scope.offset += $scope.limit;
+        datasPromise.then(function(response) {
+            if (response.length === 0) {
                 $scope.offset -= $scope.limit;
             } else {
-                $scope.datas = $scope.datas.concat(data);
+                $scope.datas = $scope.datas.concat(response.data);
             }
         }, function (error) {
             $scope.error = error;
@@ -73,7 +76,7 @@ angular.module('myApp.table', ['ngCookies', 'ngclipboard']).controller('TableCtr
 	var call = $scope.table;
 	var promise = callDB('DELETE', call, headers, data)
 	$scope.lastCalls.push("DELETE " + call);
-        promise.then(function(data) {
+        promise.then(function(response) {
             Materialize.toast('Object successfully destroyed !', 4000);
         }, function (error) {
             Materialize.toast('Operation failed!', 4000);
@@ -84,11 +87,11 @@ angular.module('myApp.table', ['ngCookies', 'ngclipboard']).controller('TableCtr
     $scope.error = "";
 
     var token = $cookies.get('token');
-    var call = "tables"
+    var call = "tables";
     var promise = callDB('GET', call, {'Authorization': token}, {});
 
-    promise.then(function (data) {
-        $scope.tables = data
+    promise.then(function (response) {
+        $scope.tables = response.data;
     }, function (error) {
         Materialize.toast('Operation failed!', 4000);
     });
@@ -101,8 +104,9 @@ angular.module('myApp.table', ['ngCookies', 'ngclipboard']).controller('TableCtr
     var token = $cookies.get('token');
     var call = $scope.table + "?Id=" + $scope.id;
     var promise = callDB('GET', call, {'Authorization': token}, {});
-    promise.then(function (data) {
-        $scope.data = data[0]
+    promise.then(function (response) {
+        $scope.data = response.data[0];
+        console.log($scope.data);
     }, function (error) {
         Materialize.toast('Operation failed!', 4000);
     });
@@ -114,10 +118,10 @@ angular.module('myApp.table', ['ngCookies', 'ngclipboard']).controller('TableCtr
             'Authorization': $cookies.get('token')
         };
 
-	var call = $scope.table + "/" + $scope.id
+        var call = $scope.table + "/" + $scope.id;
         var promise = callDB('PUT', call, headers, $scope.data);
 
-        promise.then(function (data) {
+        promise.then(function (response) {
             Materialize.toast('Object successfully changed !', 4000);
         }, function (error) {
             Materialize.toast('Operation failed!', 4000);

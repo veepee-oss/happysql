@@ -38,7 +38,8 @@ def call_db(token, db_call, table_name, params):
     value = db_call(cursor, table_name, params)
     co.commit()
     resp = jsonify(value)
-    resp.headers['Connection'] = guid
+    resp.headers['Access-Control-Expose-Headers'] = 'X-Guid'
+    resp.headers['X-Guid'] = guid
     return resp
 
 

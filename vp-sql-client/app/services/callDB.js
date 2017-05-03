@@ -5,7 +5,7 @@ angular.module('myApp').
 factory('callDB', ['$http', '$q', '__env', function($http, $q, __env) {
 
     return function(method, url, headers, data) {
-
+        console.log("Headers:", headers);
 	return $q(function(resolve, reject) {
 	    setTimeout(function() {
 		$http({
@@ -15,11 +15,11 @@ factory('callDB', ['$http', '$q', '__env', function($http, $q, __env) {
 		    headers: headers,
 		    data: $.param(data)
 		}).then(function successCallback(response) {
-		    console.log(response.data);
-		    resolve(response.data);
+		    console.log(response);
+		    resolve(response);
 		}, function errorCallback(response) {
 		    console.log(response);
-		    reject(response)
+		    reject(response);
 		});
 
 	    }, 1000);
