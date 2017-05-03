@@ -1,27 +1,25 @@
 #!/usr/bin/env python3
 
-import serverconf
-import database_call
-import cohandler
-import werkzeug.serving
 import logging
-from flask import Flask, request, session, g, redirect, url_for, abort,\
-    render_template, flash, jsonify
-from flask_swagger import swagger
-from gevent.pywsgi import WSGIServer
-from flask_compress import Compress
-from flask_cors import CORS, cross_origin
+import cohandler
+import database_call
+import serverconf
+import werkzeug.serving
+from flask import Flask, request, abort, \
+    render_template, jsonify, Response
 from flask_apscheduler import APScheduler
+from flask_compress import Compress
+from flask_cors import CORS
+from flask_swagger import swagger
 from gevent.pool import Pool
-from serverconf import FIELD_PORT, FIELD_IP, FIELD_MAX_USERS,\
+from gevent.pywsgi import WSGIServer
+from serverconf import FIELD_PORT, FIELD_IP, FIELD_MAX_USERS, \
     FIELD_SERVER_TIMEOUT
-
 
 COMPRESS_MIMETYPES = ['text/html', 'text/css', 'text/xml', 'application/json',
                       'application/javascript']
 COMPRESS_LEVEL = 6
 COMPRESS_MIN_SIZE = 500
-
 
 logging.basicConfig(level=logging.DEBUG)
 app = Flask(__name__)
@@ -36,9 +34,12 @@ def call_db(token, db_call, table_name, params):
     if token is None or co is None:
         abort(500)
     cursor = co.cursor()
+    guid = database_call.get_constraint(cursor, table_name)
     value = db_call(cursor, table_name, params)
     co.commit()
-    return jsonify(value)
+    resp = jsonify(value)
+    resp.headers['Connection'] = guid
+    return resp
 
 
 @app.route('/api/doc', methods=['GET'])
@@ -65,7 +66,7 @@ def change_credz():
 @app.route('/tables', methods=['GET'])
 def get_tables():
     token = request.headers.get("Authorization")
-    return (call_db(token, database_call.get_tables, None, None))
+    return call_db(token, database_call.get_tables, None, None)
 
 
 @app.route('/rpc/<function_name>', methods=['POST'])
@@ -77,7 +78,7 @@ def view_call(function_name):
     """
     token = request.headers.get("Authorization")
     args = request.form.to_dict()
-    return (call_db(token, database_call.function_call, function_name, args))
+    return call_db(token, database_call.function_call, function_name, args)
 
 
 @app.route('/rpc/views', methods=["GET"])
@@ -87,7 +88,7 @@ def get_views():
 
     """
     token = request.headers.get("Authorization")
-    return (call_db(token, database_call.get_views, None, None))
+    return call_db(token, database_call.get_views, None, None)
 
 
 @app.route('/rpc/new', methods=["POST"])
@@ -98,7 +99,7 @@ def add_stored_function():
     """
     token = request.headers.get("Authorization")
     args = request.form.to_dict()
-    return (call_db(token, database_call.function_store, None, params))
+    return call_db(token, database_call.function_store, None, params)
 
 
 @app.route('/<table>/columns', methods=['GET'])
@@ -108,7 +109,7 @@ def get_columns(table):
 
     """
     token = request.headers.get("Authorization")
-    return (call_db(token, database_call.get_columns, table, None))
+    return call_db(token, database_call.get_columns, table, None)
 
 
 @app.route('/<table>/<fieldId>', methods=['PUT'])
@@ -120,7 +121,7 @@ def update_user(table, fieldId):
     token = request.headers.get("Authorization")
     args = request.form.to_dict()
     args["fieldID"] = fieldId
-    return (call_db(token, database_call.update, table, args))
+    return call_db(token, database_call.update, table, args)
 
 
 @app.route('/<table>', methods=['DELETE'])
@@ -131,7 +132,7 @@ def delete(table):
     """
     token = request.headers.get("Authorization")
     args = request.form.to_dict()
-    return (call_db(token, database_call.delete, table, args))
+    return call_db(token, database_call.delete, table, args)
 
 
 @app.route('/<table>', methods=['GET'])
@@ -143,7 +144,7 @@ def select(table):
     """
     token = request.headers.get("Authorization")
     args = request.args.to_dict()
-    return (call_db(token, database_call.select, table, args))
+    return call_db(token, database_call.select, table, args)
 
 
 @app.route("/spec")
