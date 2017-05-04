@@ -6,8 +6,8 @@ controller('nodesController', ['$scope', '$cookies', '$location', 'callDB', func
     $scope.tables = [];
     $scope.svgContainer = d3.select("#graph")
 	.append("svg")
-	.attr("width", 1000)
-	.attr("height", 1000);
+	.attr("width", 2000)
+	.attr("height", 2000);
     
     var token = $cookies.get('token');
     var call = "tables"
@@ -60,7 +60,7 @@ controller('nodesController', ['$scope', '$cookies', '$location', 'callDB', func
 			i = i + 1
 		    });
 
-		    var newCircle = $scope.svgContainer.selectAll("circle .node")
+		    var newCircle = $scope.svgContainer.selectAll("circle .circle")
 			.data(tableCircles)
 			.enter()
 			.append("svg:circle")
@@ -94,13 +94,15 @@ controller('nodesController', ['$scope', '$cookies', '$location', 'callDB', func
 
 	    })
 	    .call(d3.drag().on("drag", function(d, i) {
-	    	d.x = d3.event.x
-	        d.y = d3.event.y
+		d.x = d3.event.x;
+		d.y = d3.event.y;
+		console.log(d);
 	        d3.select(this).attr("transform", function(d,i){
-	    	    return "translate(" + [ d.x,d.y ] + ")"
-	    	})
+		    console.log(d);
+	    	    return "translate(" + [d.x, d.y] + ")";
+	    	});
 	    }));
-	
+
     }, function (error) {
         Materialize.toast('Operation failed!', 4000);
     });
