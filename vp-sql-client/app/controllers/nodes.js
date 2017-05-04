@@ -20,10 +20,10 @@ controller('nodesController', ['$scope', '$cookies', '$location', 'callDB', func
     var call = "tables"
     var promise = callDB('GET', call, {'Authorization': token}, {});
 
-    promise.then(function (data) {
-        $scope.tables = data;
+    promise.then(function (response) {
+        $scope.tables = response.data;
 	var nodes = [];
-	data.forEach(function(element) {
+	response.data.forEach(function(element) {
 	    var x = Math.random() * 200 + 50;
 	    var y = Math.random() * 100 + 50;
 	    nodes.push({x: x, y: y, r: "20px", label: element.table_name});
@@ -51,13 +51,13 @@ controller('nodesController', ['$scope', '$cookies', '$location', 'callDB', func
 		var call = $scope.tables[0].table_schema + "." + $scope.tables[0].table_name + "/columns";
 		var promise = callDB('GET', call, {'Authorization': token}, {});
 
-		promise.then(function (data) {
+		promise.then(function (response) {
 
 		    var tableCircles = [];
 		    var tableLinks = [];
-		    var gap = (360 / data.length) * Math.PI / 180;
+		    var gap = (360 / response.data.length) * Math.PI / 180;
 		    var i = 0
-		    data.forEach(function(element) {
+		    response.data.forEach(function(element) {
 			var x = (Math.cos(gap * i) * (10 * parseInt(d.r))) + d.x;
 			var y = (Math.sin(gap * i) * (10 * parseInt(d.r))) + d.y;
 			var tmpNode = {x: x, y: y, r: "20px", label: element.COLUMN_NAME};
