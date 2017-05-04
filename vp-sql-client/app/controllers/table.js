@@ -30,6 +30,9 @@ angular.module('myApp.table', ['ngCookies', 'ngclipboard']).controller('TableCtr
     columnPromise.then(function (response) {
         $scope.columns = response.data;
         $scope.guid = response.headers('X-Guid');
+        if ($scope.guid === '') {
+            Materialize.toast('No primary key found. Read Only mode!', 4000);
+        }
         console.log($scope.guid);
         if ($scope.loaded === false) {
             $('.preloader-background').delay(1700).fadeOut('slow');

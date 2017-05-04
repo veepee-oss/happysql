@@ -2,7 +2,10 @@
     <form class="col s12" ng-submit="submit()">
         <div class="input-field col s6" ng-repeat="(key, value) in data">
             {{key}}
-            <input ng-model="data[key]" ng-value="data[key]" id="key" name="key" type="text" class="validate">
+            <input ng-show="key !== guid" ng-model="data[key]" ng-value="data[key]" id="key" name="key"
+                   type="text" class="validate">
+            <input disabled ng-show="key === guid" ng-model="data[key]" ng-value="data[key]" id="key" name="key"
+                   type="text" class="validate">
         </div>
         <br>
         <button class="btn waves-effect waves-light" type="submit" name="action">Submit
