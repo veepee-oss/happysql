@@ -11,12 +11,7 @@ def get_constraint(cursor, table_name):
                 "FROM INFORMATION_SCHEMA.CONSTRAINT_COLUMN_USAGE"
         sql_response = execute_request(cursor, query, [])
         for i in sql_response:
-            if i['CONSTRAINT_NAME'].find(
-                                        "PK__" +
-                                        table_name.replace(i['TABLE_SCHEMA'] + ".",
-                                                           "",
-                                                           1)
-                                        + "__") != -1:
+            if i['CONSTRAINT_NAME'].find("PK__") != -1:
                 if i['TABLE_NAME'] == table_name.replace(i['TABLE_SCHEMA'] + ".",
                                                          "",
                                                          1):
