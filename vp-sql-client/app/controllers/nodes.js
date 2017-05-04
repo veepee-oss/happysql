@@ -3,47 +3,23 @@
 angular.module('myApp.nodes', ['ngCookies']).
 
 controller('nodesController', ['$scope', '$cookies', '$location', 'callDB', function($scope, $cookies, $location, callDB) {
-    // $scope.tables = [];
     $scope.svgContainer = d3.select("#graph")
 	.append("svg")
 	.attr("width", 2000)
 	.attr("height", 2000);
-    // $scope.group = $scope.svgContainer.append("g")
-    // 	.call(d3.drag().on("drag", function(d, i) {
-    // 	    // console.log(d3.event);
-    // 	    d3.select(this).attr("transform", function(d,i){
-    // 	    	return "translate(" + [d3.event.x, d3.event.y] + ")";
-    // 	    });
-    // 	}));
 
     var token = $cookies.get('token');
     var call = "tables"
     var promise = callDB('GET', call, {'Authorization': token}, {});
 
     promise.then(function (response) {
-        // $scope.tables = response.data;
-	// var nodes = [];
-	// response.data.forEach(function(element) {
-	//     var x = Math.random() * 200 + 50;
-	//     var y = Math.random() * 100 + 50;
-	//     nodes.push({x: x, y: y, r: "20px", label: element.table_name});
-	// });
-
-	// var text = $scope.group.selectAll("txt .txt")
-	//     .data(nodes)
-	//     .enter()
-	//     .append("svg:text")
-	//     .attr("x", function(d) { return (d.x - (d.label.length / 2) * (6)) })
-	//     .attr("y", function(d) { return d.y - parseInt(d.r) })
-	//     .text(function(d) { return d.label });
 
 	response.data.forEach(function(element) {
 	    var nodes = [{x: Math.random() * 200 + 50, y: Math.random() * 100 + 50, r: "20px", label: element.table_name}];
 	    var group = $scope.svgContainer.append("g")
 		.call(d3.drag().on("drag", function(d, i) {
-		    // console.log(d3.event);
 		    d3.select(this).attr("transform", function(d,i){
-	    		return "translate(" + [d3.event.x, d3.event.y] + ")";
+	    		return "translate(" + [d3.event.x - nodes[0].x, d3.event.y - nodes[0].y] + ")";
 		    });
 		}));
 
@@ -64,7 +40,6 @@ controller('nodesController', ['$scope', '$cookies', '$location', 'callDB', func
 		.attr("cy", function(d) { return d.y; }) // centre en posY = data.y
 		.attr("r", function(d) { return d.r; }) // rayon : 10px
 		.on("click", function(d) {
-		    // console.log($scope.tables[0]);
 		    var token = $cookies.get('token');
 		    var call = element.table_schema + "." + element.table_name + "/columns";
 		    var promise = callDB('GET', call, {'Authorization': token}, {});
