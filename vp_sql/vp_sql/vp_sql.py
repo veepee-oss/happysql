@@ -121,7 +121,9 @@ def update_user(table, fieldId):
     """
     token = request.headers.get("Authorization")
     args = request.form.to_dict()
-    args["fieldID"] = fieldId
+    logging.debug(fieldId)
+    args["fieldId"] = fieldId
+    logging.debug(args['fieldId'])
     return call_db(token, database_call.update, table, args)
 
 
