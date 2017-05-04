@@ -13,7 +13,6 @@ controller('nodesController', ['$scope', '$cookies', '$location', 'callDB', func
     var promise = callDB('GET', call, {'Authorization': token}, {});
 
     promise.then(function (response) {
-
 	response.data.forEach(function(element) {
 	    var nodes = [{x: Math.random() * 200 + 50, y: Math.random() * 100 + 50, r: "20px", label: element.table_name}];
 	    var group = $scope.svgContainer.append("g")
@@ -45,7 +44,7 @@ controller('nodesController', ['$scope', '$cookies', '$location', 'callDB', func
 		    var promise = callDB('GET', call, {'Authorization': token}, {});
 
 		    promise.then(function (response) {
-
+			var guid = response.headers('X-Guid');
 			var tableCircles = [];
 			var tableLinks = [];
 			var gap = (360 / response.data.length) * Math.PI / 180;
@@ -64,7 +63,7 @@ controller('nodesController', ['$scope', '$cookies', '$location', 'callDB', func
 			    .data(tableCircles)
 			    .enter()
 			    .append("svg:circle")
-			    .attr("class", "tableNode")
+			    .attr("class", function(d) { if (d.label === guid) { return ("guidNode") } else { return ("tableNode") } })
 			    .attr("cx", function(d) { return d.x; }) // centre en posX = data.x
 			    .attr("cy", function(d) { return d.y; }) // centre en posY = data.y
 			    .attr("r", function(d) { return d.r; });
