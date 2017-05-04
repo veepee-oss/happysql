@@ -39,6 +39,26 @@ controller('nodesController', ['$scope', '$cookies', '$location', 'callDB', func
 		.attr("cy", function(d) { return d.y; }) // centre en posY = data.y
 		.attr("r", function(d) { return d.r; }) // rayon : 10px
 		.on("click", function(d) {
+		    // console.log(group.selectAll("ntxt .ntxt")._parents[0].childNodes.getElementsByTagName("text"));
+		    var count = 0;
+		    for (var i = 0; i < group.selectAll("ntxt.ntxt")._parents[0].childNodes.length; ++i) {
+			if (group.selectAll("ntxt .ntxt")._parents[0].childNodes[i].localName == "text") {
+			    count = count + 1;
+			}
+		    }
+		    if (count > 1) {
+			// console.log("lol");
+			// console.log(group.selectAll("ntxt.ntxt"));
+			for (var i = 0; i < group.selectAll("ntxt.ntxt")._parents[0].childNodes.length; ++i) {
+			    console.log(group.selectAll("ntxt .ntxt")._parents[0].childNodes[i].localName);
+			    if (group.selectAll("ntxt .ntxt")._parents[0].childNodes[i].localName == "text"
+				|| group.selectAll("ntxt .ntxt")._parents[0].childNodes[i].localName == "circle"
+				|| group.selectAll("ntxt .ntxt")._parents[0].childNodes[i].localName == "line") {
+				group.selectAll("ntxt .ntxt")._parents[0].childNodes[i].remove();
+			    }
+			}
+			return ;
+		    }
 		    var token = $cookies.get('token');
 		    var call = element.table_schema + "." + element.table_name + "/columns";
 		    var promise = callDB('GET', call, {'Authorization': token}, {});
@@ -59,7 +79,7 @@ controller('nodesController', ['$scope', '$cookies', '$location', 'callDB', func
 			    i = i + 1
 			});
 
-			var newCircle = group.selectAll("circle .circle")
+			var newCircle = group.selectAll("subCircle .circle")
 			    .data(tableCircles)
 			    .enter()
 			    .append("svg:circle")
@@ -69,7 +89,7 @@ controller('nodesController', ['$scope', '$cookies', '$location', 'callDB', func
 			    .attr("r", function(d) { return d.r; });
 
 			// console.log(tableCircles);
-			var newText = group.selectAll("ntxt .ntxt")
+			var newText = group.selectAll("ntxt.ntxt")
 			    .data(tableCircles)
 			    .enter()
 			    .append("svg:text")
