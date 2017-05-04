@@ -68,7 +68,8 @@ angular.module('myApp.table', ['ngCookies', 'ngclipboard']).controller('TableCtr
             return;
         }
         var headers = {'Authorization': $scope.token, 'Content-Type': 'application/x-www-form-urlencoded'};
-        var data = {'Id': index};
+        var data = {};
+        data[$scope.guid] = index;
         var call = $scope.table;
         var promise = callDB('DELETE', call, headers, data);
         $scope.lastCalls.push("DELETE " + call);
