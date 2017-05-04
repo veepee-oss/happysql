@@ -48,7 +48,7 @@ config(['$locationProvider', '$routeProvider', '$httpProvider', function($locati
         .when('/error', {
             templateUrl: 'views/error.html'
         })
-	.when('/test', {
+	.when('/graph', {
 	    templateUrl: 'views/d3test.html',
 	    controller: 'nodesController'
 	})

@@ -6,23 +6,30 @@ controller('nodesController', ['$scope', '$cookies', '$location', 'callDB', func
     $scope.tables = [];
     $scope.svgContainer = d3.select("#graph")
 	.append("svg")
-	.attr("width", 1000)
-	.attr("height", 1000);
+	.attr("width", 2000)
+	.attr("height", 2000);
+    $scope.group = $scope.svgContainer.append("g")
+	.call(d3.drag().on("drag", function(d, i) {
+	    // console.log(d3.event);
+	    d3.select(this).attr("transform", function(d,i){
+	    	return "translate(" + [d3.event.x, d3.event.y] + ")";
+	    });
+	}));
     
     var token = $cookies.get('token');
     var call = "tables"
     var promise = callDB('GET', call, {'Authorization': token}, {});
 
-    promise.then(function (data) {
-        $scope.tables = data;
+    promise.then(function (response) {
+        $scope.tables = response.data;
 	var nodes = [];
-	data.forEach(function(element) {
+	response.data.forEach(function(element) {
 	    var x = Math.random() * 200 + 50;
 	    var y = Math.random() * 100 + 50;
 	    nodes.push({x: x, y: y, r: "20px", label: element.table_name});
 	});
 
-	var text = $scope.svgContainer.selectAll("txt .txt")
+	var text = $scope.group.selectAll("txt .txt")
 	    .data(nodes)
 	    .enter()
 	    .append("svg:text")
@@ -30,7 +37,7 @@ controller('nodesController', ['$scope', '$cookies', '$location', 'callDB', func
 	    .attr("y", function(d) { return d.y - parseInt(d.r) })
 	    .text(function(d) { return d.label });
 
-	var circle = $scope.svgContainer.selectAll("circle .circle")
+	var circle = $scope.group.selectAll("circle .circle")
 	    .data(nodes)
 	    .enter()
 	    .append("svg:circle")
@@ -44,13 +51,13 @@ controller('nodesController', ['$scope', '$cookies', '$location', 'callDB', func
 		var call = $scope.tables[0].table_schema + "." + $scope.tables[0].table_name + "/columns";
 		var promise = callDB('GET', call, {'Authorization': token}, {});
 
-		promise.then(function (data) {
+		promise.then(function (response) {
 
 		    var tableCircles = [];
 		    var tableLinks = [];
-		    var gap = (360 / data.length) * Math.PI / 180;
+		    var gap = (360 / response.data.length) * Math.PI / 180;
 		    var i = 0
-		    data.forEach(function(element) {
+		    response.data.forEach(function(element) {
 			var x = (Math.cos(gap * i) * (10 * parseInt(d.r))) + d.x;
 			var y = (Math.sin(gap * i) * (10 * parseInt(d.r))) + d.y;
 			var tmpNode = {x: x, y: y, r: "20px", label: element.COLUMN_NAME};
@@ -60,7 +67,7 @@ controller('nodesController', ['$scope', '$cookies', '$location', 'callDB', func
 			i = i + 1
 		    });
 
-		    var newCircle = $scope.svgContainer.selectAll("circle .node")
+		    var newCircle = $scope.group.selectAll("circle .circle")
 			.data(tableCircles)
 			.enter()
 			.append("svg:circle")
@@ -70,7 +77,7 @@ controller('nodesController', ['$scope', '$cookies', '$location', 'callDB', func
 			.attr("r", function(d) { return d.r; });
 
 		    console.log(tableCircles);
-		    var newText = $scope.svgContainer.selectAll("ntxt .ntxt")
+		    var newText = $scope.group.selectAll("ntxt .ntxt")
 			.data(tableCircles)
 			.enter()
 			.append("svg:text")
@@ -78,7 +85,7 @@ controller('nodesController', ['$scope', '$cookies', '$location', 'callDB', func
 			.attr("y", function(d) { return d.y - parseInt(d.r) })
 			.text(function(d) { return d.label });
 
-		    var newLink = $scope.svgContainer.selectAll("newLink .newLink")
+		    var newLink = $scope.group.selectAll("newLink .newLink")
 			.data(tableLinks)
 			.enter()
 			.append("svg:line")
@@ -91,18 +98,8 @@ controller('nodesController', ['$scope', '$cookies', '$location', 'callDB', func
 		}, function (error) {
 		    Materialize.toast('Operation failed!', 4000);
 		});
-
-	    })
-	    .call(d3.drag().on("drag", function(d, i) {
-	    	d.x = d3.event.x
-	        d.y = d3.event.y
-	        d3.select(this).attr("transform", function(d,i){
-	    	    return "translate(" + [ d.x,d.y ] + ")"
-	    	})
-	    }));
-	
+	    });
     }, function (error) {
         Materialize.toast('Operation failed!', 4000);
     });
-
 }]);
