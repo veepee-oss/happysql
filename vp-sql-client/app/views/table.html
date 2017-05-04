@@ -58,7 +58,15 @@
                     <tr ng-repeat="data in datas | filter:query | orderBy: order:reverse">
                         <td ng-repeat="column in columns"> {{data[column.COLUMN_NAME]}} </td>
                         <td><a class="waves-effect waves-light btn" ng-click="deleteElement(data.Id)"><i class="material-icons">delete</i></a></td>
-                        <td><a class="waves-effect waves-light btn" ng-href="#!/table/{{table}}/{{data.Id}}"><i class="material-icons">description</i></a></td>
+
+                        <td ng-show="guid !== ''"><a class="waves-effect waves-light btn"
+                                                      ng-href="#!/table/{{table}}/{{guid}}/{{data[guid]}}">
+                            <i class="material-icons">description</i>
+                        </a></td>
+                        <td ng-show="guid === ''"><a class="waves-effect waves-light btn disabled">
+                            <i class="material-icons">description</i>
+                        </a></td>
+
                     </tr>
                     </tbody>
                 </table>

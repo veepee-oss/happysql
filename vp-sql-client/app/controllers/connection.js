@@ -22,8 +22,8 @@ angular.module('myApp.connection', ['ngCookies'])
             };
 	    var call = "change_credz";
             var promise = callDB('POST', call, {'Content-Type': 'application/x-www-form-urlencoded'}, data);
-            promise.then(function(data) {
-                $scope.datas = data;
+            promise.then(function(response) {
+                $scope.datas = response.data;
                 $scope.user = '';
                 $scope.password = '';
                 $scope.server = '';

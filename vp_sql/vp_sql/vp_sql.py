@@ -38,7 +38,8 @@ def call_db(token, db_call, table_name, params):
     value = db_call(cursor, table_name, params)
     co.commit()
     resp = jsonify(value)
-    resp.headers['Connection'] = guid
+    resp.headers['Access-Control-Expose-Headers'] = 'X-Guid'
+    resp.headers['X-Guid'] = guid
     return resp
 
 
@@ -120,7 +121,9 @@ def update_user(table, fieldId):
     """
     token = request.headers.get("Authorization")
     args = request.form.to_dict()
-    args["fieldID"] = fieldId
+    logging.debug(fieldId)
+    args["fieldId"] = fieldId
+    logging.debug(args['fieldId'])
     return call_db(token, database_call.update, table, args)
 
 

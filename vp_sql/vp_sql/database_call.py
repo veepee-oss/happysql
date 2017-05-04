@@ -242,11 +242,12 @@ def delete(cursor, table, params):
 
 def update(cursor, table, params):
     arguments = []
+    guid = get_constraint(cursor, table)
     query = "UPDATE " + table + " SET "
     for key, value in params.items():
         value = value.replace("'", "\\'")
         value = value.replace('"', '\\"')
-        if key == "fieldID":
+        if key == "fieldId" or key == guid:
             continue
         a = is_date(value)
         if a:
@@ -255,9 +256,8 @@ def update(cursor, table, params):
         arguments.append(value)
     if len(params) != 0:
         query = query[:-1]
-    query += " FROM " + table + " "
-    query += " WHERE Id=" + params["fieldId"] # <----- change this line
-                                              # need to put the fieldID key and vlue
+    query += " FROM " + table
+    query += " WHERE " + guid + "=" + params["fieldId"]
     print(query + " | ", arguments)
     try:
         cursor.execute(query, *arguments)

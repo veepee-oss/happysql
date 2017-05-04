@@ -29,7 +29,7 @@ config(['$locationProvider', '$routeProvider', '$httpProvider', function($locati
             templateUrl: 'views/connection.html',
             controller: 'ConnectionCtrl'
         })
-        .when('/table/:tableName/:id', {
+        .when('/table/:tableName/:guid/:id', {
             templateUrl: 'views/edit.html',
             controller: 'editController'
         })
