@@ -35,6 +35,7 @@ def call_db(token, db_call, table_name, params):
         abort(500)
     cursor = co.cursor()
     guid = database_call.get_constraint(cursor, table_name)
+    logging.debug(guid)
     value = db_call(cursor, table_name, params)
     co.commit()
     resp = jsonify(value)
