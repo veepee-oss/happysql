@@ -1,10 +1,10 @@
 from setuptools import setup
 
 setup(
-    name='vp_sql',
+    name='HappySQL',
     version='0.5',
-    description='REST API for sqlserver',
-    packages=['vp_sql'],
+    description='REST API for SQL Server',
+    packages=['HappySQL'],
     include_package_data=True,
     install_requires=[
         'flask',
@@ -13,6 +13,7 @@ setup(
         'flask_cors',
         'pyodbc',
         'gevent',
-        'PyJWT'
+        'PyJWT',
+        'python-dateutil'
         ],
 )

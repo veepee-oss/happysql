@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 import logging
-from cohandler import TOKEN_DB_NAME
 from dateutil.parser import parse
 
 
@@ -88,11 +87,11 @@ def get_tables(cursor, name, param):
 def execute_request(cursor, query, args):
     query = query.replace("--", "")
     query = query.replace("#", "")
-    print(query + " | ", args)
+    logging.debug(query + " | {}".format(args))
     try:
         cursor.execute(query, *args)
     except Exception as e:
-        print(e)
+        logging.error(e)
         return {'success': False}
     keys = []
     for elem in cursor.description:
@@ -111,7 +110,7 @@ def execute_request(cursor, query, args):
 def function_call(cursor, function_name, params):
     arguments = []
     request = "SELECT * FROM " + function_name + "(" + params.get("arg") + ")"
-    print(request, arguments)
+    logging.debug(request, arguments)
     return execute_request(cursor, request, arguments)
 
 
@@ -227,7 +226,7 @@ def delete(cursor, table, params):
         query += key + "=" + value + " and "
     if len(params) != 0:
         query = query[:-5]
-    print(query)
+    logging.debug(query)
     try:
         cursor.execute(query)
     except Exception as e:
@@ -253,11 +252,11 @@ def update(cursor, table, params):
         query = query[:-1]
     query += " FROM " + table
     query += " WHERE " + guid + "=" + params["fieldId"]
-    print(query + " | ", arguments)
+    logging.debug(query + " | ", arguments)
     try:
         cursor.execute(query, *arguments)
     except Exception as e:
-        print(e)
+        logging.error(e)
         return {"success": False}
     return {"success": True}
 
@@ -266,6 +265,6 @@ def function_store(cursor, name, params):
     try:
         cursor.execute(params["query"])
     except Exception as e:
-        print(e)
+        logging.error(e)
         return {"success": False}
     return {"success": True}

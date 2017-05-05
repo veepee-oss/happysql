@@ -5,6 +5,7 @@ import cohandler
 import database_call
 import serverconf
 import werkzeug.serving
+import benchmark
 from flask import Flask, request, abort, \
     render_template, jsonify, Response
 from flask_apscheduler import APScheduler
@@ -14,14 +15,13 @@ from flask_swagger import swagger
 from gevent.pool import Pool
 from gevent.pywsgi import WSGIServer
 from serverconf import FIELD_PORT, FIELD_IP, FIELD_MAX_USERS, \
-    FIELD_SERVER_TIMEOUT
+    FIELD_SERVER_TIMEOUT, FIELD_DEBUG, FIELD_BENCHMARK
 
 COMPRESS_MIMETYPES = ['text/html', 'text/css', 'text/xml', 'application/json',
                       'application/javascript']
 COMPRESS_LEVEL = 6
 COMPRESS_MIN_SIZE = 500
 
-logging.basicConfig(level=logging.DEBUG)
 app = Flask(__name__)
 CORS(app, supports_credentials=True)
 Compress(app)
@@ -41,6 +41,7 @@ def call_db(token, db_call, table_name, params):
     resp = jsonify(value)
     resp.headers['Access-Control-Expose-Headers'] = 'X-Guid'
     resp.headers['X-Guid'] = guid
+    benchmark.benchmark_stop()
     return resp
 
 
@@ -67,6 +68,7 @@ def change_credz():
 
 @app.route('/tables', methods=['GET'])
 def get_tables():
+    benchmark.benchmark_start()
     token = request.headers.get("Authorization")
     return call_db(token, database_call.get_tables, None, None)
 
@@ -78,6 +80,7 @@ def view_call(function_name):
 
     swagger_from_file: doc/view_call.yml
     """
+    benchmark.benchmark_start()
     token = request.headers.get("Authorization")
     args = request.form.to_dict()
     return call_db(token, database_call.function_call, function_name, args)
@@ -89,6 +92,7 @@ def get_views():
     Get all views
 
     """
+    benchmark.benchmark_start()
     token = request.headers.get("Authorization")
     return call_db(token, database_call.get_views, None, None)
 
@@ -99,6 +103,7 @@ def add_stored_function():
     Store user defined function
 
     """
+    benchmark.benchmark_start()
     token = request.headers.get("Authorization")
     args = request.form.to_dict()
     return call_db(token, database_call.function_store, None, params)
@@ -110,6 +115,7 @@ def get_columns(table):
     Get columns of Table
 
     """
+    benchmark.benchmark_start()
     token = request.headers.get("Authorization")
     return call_db(token, database_call.get_columns, table, None)
 
@@ -120,6 +126,7 @@ def update_user(table, fieldId):
     Update query
 
     """
+    benchmark.benchmark_start()
     token = request.headers.get("Authorization")
     args = request.form.to_dict()
     logging.debug(fieldId)
@@ -134,6 +141,7 @@ def delete(table):
     Delete query
 
     """
+    benchmark.benchmark_start()
     token = request.headers.get("Authorization")
     args = request.form.to_dict()
     return call_db(token, database_call.delete, table, args)
@@ -146,6 +154,7 @@ def select(table):
 
     swagger_from_file: doc/select.yml
     """
+    benchmark.benchmark_start()
     token = request.headers.get("Authorization")
     args = request.args.to_dict()
     return call_db(token, database_call.select, table, args)
@@ -175,12 +184,21 @@ class Config(object):
 
 @werkzeug.serving.run_with_reloader
 def run_server():
+    logging.basicConfig(level=logging.DEBUG)
     serverconf.load_server_conf()
+    if serverconf.get_conf()[FIELD_BENCHMARK] \
+            and not serverconf.get_conf()[FIELD_DEBUG]:
+        logging.basicConfig(level=logging.INFO)
+        logging.warn("Benchmark mode enabled!")
+    elif serverconf.get_conf()[FIELD_DEBUG]:
+        logging.basicConfig(level=logging.DEBUG)
+        logging.warn("Debug mode enabled!")
+
     app.config.from_object(Config())
     app.config.from_envvar('FLASKR_SETTINGS', silent=True)
 
-    # Debug enabled
-    app.debug = True
+    if serverconf.get_conf()[FIELD_DEBUG]:
+        app.debug = True
 
     cohandler.refresh_secret()
     scheduler = APScheduler()

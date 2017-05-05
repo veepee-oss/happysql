@@ -54,6 +54,7 @@ def connect(token=None, params=dict()):
             try:
                 tok = jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
             except Exception as e:
+                logging.error(e)
                 return None, "you should reauthenticate"
         else:
             try:
@@ -65,6 +66,7 @@ def connect(token=None, params=dict()):
                 tok[TOKEN_EXP] = datetime.utcnow() + timedelta(
                     hours=JWT_EXP_DELTA_HOURS)
             except Exception as e:
+                logging.error(e)
                 return None, "missing parameters"
             token = jwt.encode(tok, JWT_SECRET, algorithm=JWT_ALGORITHM)
         co = pyodbc.connect(r'DRIVER={' +
@@ -76,7 +78,7 @@ def connect(token=None, params=dict()):
                             timeout=serverconf.get_conf()[FIELD_SQL_TIMEOUT])
         return co, token.decode("utf-8")
     except pyodbc.Error as ex:
-        logging.warn(ex)
+        logging.error(ex)
     except jwt.ExpiredSignatureError:
         return None, "could not reach SQL server"
     return None, "could not reach SQL server"
