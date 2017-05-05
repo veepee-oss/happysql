@@ -67,6 +67,11 @@ def change_credz():
 
 @app.route('/tables', methods=['GET'])
 def get_tables():
+    """
+    Get all tables
+    
+    swagger_from_file: doc/tables.yml
+    """
     token = request.headers.get("Authorization")
     return call_db(token, database_call.get_tables, None, None)
 
@@ -88,6 +93,7 @@ def get_views():
     """
     Get all views
 
+    swagger_from_file: doc/views.yml
     """
     token = request.headers.get("Authorization")
     return call_db(token, database_call.get_views, None, None)
@@ -98,6 +104,7 @@ def add_stored_function():
     """
     Store user defined function
 
+    swagger_from_file: doc/view_add.yml
     """
     token = request.headers.get("Authorization")
     args = request.form.to_dict()
@@ -109,6 +116,7 @@ def get_columns(table):
     """
     Get columns of Table
 
+    swagger_from_file: doc/columns.yml
     """
     token = request.headers.get("Authorization")
     return call_db(token, database_call.get_columns, table, None)

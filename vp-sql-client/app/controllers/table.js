@@ -36,13 +36,11 @@ angular.module('myApp.table', ['ngCookies', 'ngclipboard']).controller('TableCtr
         console.log($scope.guid);
         if ($scope.loaded === false) {
             $('.preloader-background').delay(1700).fadeOut('slow');
-
             $('.preloader-wrapper')
                 .delay(1700)
                 .fadeOut();
             $scope.loaded = true;
         }
-
     }, function (error) {
         Materialize.toast('You should reauthenticate!', 4000);
     });
@@ -82,6 +80,7 @@ angular.module('myApp.table', ['ngCookies', 'ngclipboard']).controller('TableCtr
             Materialize.toast('Operation failed!', 4000);
         });
     };
+
 }]).controller('allTablesCtrl', ['$scope', '$cookies', 'callDB', function ($scope, $cookies, callDB) {
     $scope.tables = [];
     $scope.error = "";
@@ -95,6 +94,7 @@ angular.module('myApp.table', ['ngCookies', 'ngclipboard']).controller('TableCtr
     }, function (error) {
         Materialize.toast('Operation failed!', 4000);
     });
+
 }]).controller('editController', ['$scope', '$cookies', '$location', 'callDB', function ($scope, $cookies, $location, callDB) {
     $scope.data = {};
     var split = $location.path().split('/');

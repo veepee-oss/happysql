@@ -1,0 +1,14 @@
+Columns query
+---
+tags:
+  - queries
+
+parameters:
+  - name: table
+    in: path
+    decription: Table you need
+    required: true
+    type: string
+  - name: columns
+    value: "columns"
+    description: value = columns

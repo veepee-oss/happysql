@@ -258,7 +258,7 @@ def update(cursor, table, params):
         cursor.execute(query, *arguments)
     except Exception as e:
         print(e)
-        return {"success": False}
+        return {"success": False, "message": e}
     return {"success": True}
 
 
