@@ -22,15 +22,15 @@ controller('nodesController', ['$scope', '$cookies', '$location', 'callDB', func
 		    });
 		}));
 
-	    var text = group.selectAll("txt .txt")
+	    var text = group.selectAll("txt.txt")
 		.data(nodes)
 		.enter()
 		.append("svg:text")
 		.attr("x", function(d) { return (d.x - (d.label.length / 2) * (6)) })
 		.attr("y", function(d) { return d.y - parseInt(d.r) })
 		.text(function(d) { return d.label });
-	    
-	    var circle = group.selectAll("circle .circle")
+
+	    var circle = group.selectAll("circle.circle")
 		.data(nodes)
 		.enter()
 		.append("svg:circle")
@@ -40,22 +40,13 @@ controller('nodesController', ['$scope', '$cookies', '$location', 'callDB', func
 		.attr("r", function(d) { return d.r; }) // rayon : 10px
 		.on("click", function(d) {
 		    // console.log(group.selectAll("ntxt .ntxt")._parents[0].childNodes.getElementsByTagName("text"));
-		    var count = 0;
-		    for (var i = 0; i < group.selectAll("ntxt.ntxt")._parents[0].childNodes.length; ++i) {
-			if (group.selectAll("ntxt .ntxt")._parents[0].childNodes[i].localName == "text") {
-			    count = count + 1;
-			}
-		    }
-		    if (count > 1) {
-			// console.log("lol");
-			// console.log(group.selectAll("ntxt.ntxt"));
-			for (var i = 0; i < group.selectAll("ntxt.ntxt")._parents[0].childNodes.length; ++i) {
-			    console.log(group.selectAll("ntxt .ntxt")._parents[0].childNodes[i].localName);
-			    if (group.selectAll("ntxt .ntxt")._parents[0].childNodes[i].localName == "text"
-				|| group.selectAll("ntxt .ntxt")._parents[0].childNodes[i].localName == "circle"
-				|| group.selectAll("ntxt .ntxt")._parents[0].childNodes[i].localName == "line") {
-				group.selectAll("ntxt .ntxt")._parents[0].childNodes[i].remove();
-			    }
+		    var groupNodes = group._groups[0][0].childNodes;
+		    var nbStartNodes = 2;
+		    // console.log(groupNodes);
+		    if (groupNodes.length > nbStartNodes) {
+			var i = (groupNodes.length - nbStartNodes);
+			for (var j = 0; j < i; ++j) {
+			    groupNodes[nbStartNodes].remove();
 			}
 			return ;
 		    }
@@ -79,7 +70,7 @@ controller('nodesController', ['$scope', '$cookies', '$location', 'callDB', func
 			    i = i + 1
 			});
 
-			var newCircle = group.selectAll("subCircle .circle")
+			var newCircle = group.selectAll("subCircle.circle")
 			    .data(tableCircles)
 			    .enter()
 			    .append("svg:circle")
@@ -88,7 +79,6 @@ controller('nodesController', ['$scope', '$cookies', '$location', 'callDB', func
 			    .attr("cy", function(d) { return d.y; }) // centre en posY = data.y
 			    .attr("r", function(d) { return d.r; });
 
-			// console.log(tableCircles);
 			var newText = group.selectAll("ntxt.ntxt")
 			    .data(tableCircles)
 			    .enter()
@@ -97,7 +87,7 @@ controller('nodesController', ['$scope', '$cookies', '$location', 'callDB', func
 			    .attr("y", function(d) { return d.y - parseInt(d.r) })
 			    .text(function(d) { return d.label });
 
-			var newLink = group.selectAll("newLink .newLink")
+			var newLink = group.selectAll("newLink.newLink")
 			    .data(tableLinks)
 			    .enter()
 			    .append("svg:line")
