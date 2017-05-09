@@ -6,8 +6,8 @@ import serverconf
 import jwt
 import secrets
 from datetime import datetime, timedelta
-from serverconf import FIELD_SQL_TIMEOUT, FIELD_SQL_DRIVER
-
+from serverconf import FIELD_SQL_TIMEOUT, FIELD_SQL_DRIVER,\
+    FIELD_DEBUG, FIELD_BENCHMARK
 
 TOKEN_SERVER = "server"
 TOKEN_DB_NAME = "dbname"
@@ -44,7 +44,8 @@ JWT_EXP_DELTA_HOURS = 1
 
 def refresh_secret():
     global JWT_SECRET
-    JWT_SECRET = secrets.token_bytes(secrets.choice(range(32, 64)))
+    if not serverconf.get_conf()[FIELD_BENCHMARK]:
+        JWT_SECRET = secrets.token_bytes(secrets.choice(range(32, 64)))
 
 
 def connect(token=None, params=dict()):

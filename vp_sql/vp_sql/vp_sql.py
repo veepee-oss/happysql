@@ -4,7 +4,6 @@ import logging
 import cohandler
 import database_call
 import serverconf
-import werkzeug.serving
 import benchmark
 from flask import Flask, request, abort, \
     render_template, jsonify, Response
@@ -14,6 +13,7 @@ from flask_cors import CORS
 from flask_swagger import swagger
 from gevent.pool import Pool
 from gevent.pywsgi import WSGIServer
+from logging.handlers import RotatingFileHandler
 from serverconf import FIELD_PORT, FIELD_IP, FIELD_MAX_USERS, \
     FIELD_SERVER_TIMEOUT, FIELD_DEBUG, FIELD_BENCHMARK
 
@@ -41,7 +41,6 @@ def call_db(token, db_call, table_name, params):
     resp = jsonify(value)
     resp.headers['Access-Control-Expose-Headers'] = 'X-Guid'
     resp.headers['X-Guid'] = guid
-    benchmark.benchmark_stop()
     return resp
 
 
@@ -68,7 +67,6 @@ def change_credz():
 
 @app.route('/tables', methods=['GET'])
 def get_tables():
-    benchmark.benchmark_start()
     token = request.headers.get("Authorization")
     return call_db(token, database_call.get_tables, None, None)
 
@@ -80,7 +78,6 @@ def view_call(function_name):
 
     swagger_from_file: doc/view_call.yml
     """
-    benchmark.benchmark_start()
     token = request.headers.get("Authorization")
     args = request.form.to_dict()
     return call_db(token, database_call.function_call, function_name, args)
@@ -92,7 +89,6 @@ def get_views():
     Get all views
 
     """
-    benchmark.benchmark_start()
     token = request.headers.get("Authorization")
     return call_db(token, database_call.get_views, None, None)
 
@@ -103,7 +99,6 @@ def add_stored_function():
     Store user defined function
 
     """
-    benchmark.benchmark_start()
     token = request.headers.get("Authorization")
     args = request.form.to_dict()
     return call_db(token, database_call.function_store, None, params)
@@ -115,7 +110,6 @@ def get_columns(table):
     Get columns of Table
 
     """
-    benchmark.benchmark_start()
     token = request.headers.get("Authorization")
     return call_db(token, database_call.get_columns, table, None)
 
@@ -126,7 +120,6 @@ def update_user(table, fieldId):
     Update query
 
     """
-    benchmark.benchmark_start()
     token = request.headers.get("Authorization")
     args = request.form.to_dict()
     logging.debug(fieldId)
@@ -141,7 +134,6 @@ def delete(table):
     Delete query
 
     """
-    benchmark.benchmark_start()
     token = request.headers.get("Authorization")
     args = request.form.to_dict()
     return call_db(token, database_call.delete, table, args)
@@ -154,7 +146,6 @@ def select(table):
 
     swagger_from_file: doc/select.yml
     """
-    benchmark.benchmark_start()
     token = request.headers.get("Authorization")
     args = request.args.to_dict()
     return call_db(token, database_call.select, table, args)
@@ -164,8 +155,22 @@ def select(table):
 def spec():
     swag = swagger(app, from_file_keyword='swagger_from_file')
     swag['info']['version'] = "0.5"
-    swag['info']['title'] = "SQLServer REST API"
+    swag['info']['title'] = "HappySQL"
     return jsonify(swag)
+
+
+@app.before_request
+def before_request(req=None):
+    if serverconf.get_conf()[FIELD_BENCHMARK]:
+        benchmark.benchmark_start()
+    return req
+
+
+@app.after_request
+def after_request(req=None):
+    if serverconf.get_conf()[FIELD_BENCHMARK]:
+        benchmark.benchmark_stop()
+    return req
 
 
 class Config(object):
@@ -182,20 +187,30 @@ class Config(object):
     SCHEDULER_API_ENABLED = True
 
 
-@werkzeug.serving.run_with_reloader
 def run_server():
-    logging.basicConfig(level=logging.DEBUG)
+    global app
     serverconf.load_server_conf()
+
     if serverconf.get_conf()[FIELD_BENCHMARK] \
             and not serverconf.get_conf()[FIELD_DEBUG]:
-        logging.basicConfig(level=logging.INFO)
+        logging.getLogger().setLevel(logging.INFO)
+        formatter = logging.Formatter(
+            '%(asctime)s :: %(levelname)s :: %(message)s')
+        file_handler = RotatingFileHandler('benchmark.log', 1000000, 1)
+        file_handler.setLevel(logging.DEBUG)
+        file_handler.setFormatter(formatter)
+        logging.getLogger().addHandler(file_handler)
+        steam_handler = logging.StreamHandler()
+        steam_handler.setLevel(logging.DEBUG)
+        logging.getLogger().addHandler(steam_handler)
         logging.warn("Benchmark mode enabled!")
     elif serverconf.get_conf()[FIELD_DEBUG]:
-        logging.basicConfig(level=logging.DEBUG)
+        logging.getLogger().setLevel(logging.DEBUG)
         logging.warn("Debug mode enabled!")
 
     app.config.from_object(Config())
     app.config.from_envvar('FLASKR_SETTINGS', silent=True)
+    # app.wsgi_app = benchmark.SimpleMiddleWare(app.wsgi_app)
 
     if serverconf.get_conf()[FIELD_DEBUG]:
         app.debug = True
