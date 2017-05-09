@@ -1,15 +1,15 @@
 import logging
-import datetime
+import time
 
 START_TIME = None
 
 
 def benchmark_start():
     global START_TIME
-    START_TIME = datetime.datetime.now()
+    START_TIME = time.time()
 
 
-def benchmark_stop():
+def benchmark_stop(req):
     global START_TIME
-    elapsed_time = datetime.datetime.now() - START_TIME
-    logging.info("Benchmark: %d", elapsed_time.microseconds)
+    elapsed_time = time.time() - START_TIME
+    logging.info("BENCHMARK : %s = %f", req,elapsed_time)

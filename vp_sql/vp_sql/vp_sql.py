@@ -160,17 +160,17 @@ def spec():
 
 
 @app.before_request
-def before_request(req=None):
+def before_request(resp=None):
     if serverconf.get_conf()[FIELD_BENCHMARK]:
         benchmark.benchmark_start()
-    return req
+    return resp
 
 
 @app.after_request
-def after_request(req=None):
+def after_request(resp=None):
     if serverconf.get_conf()[FIELD_BENCHMARK]:
-        benchmark.benchmark_stop()
-    return req
+        benchmark.benchmark_stop(request.endpoint)
+    return resp
 
 
 class Config(object):
@@ -196,7 +196,7 @@ def run_server():
         logging.getLogger().setLevel(logging.INFO)
         formatter = logging.Formatter(
             '%(asctime)s :: %(levelname)s :: %(message)s')
-        file_handler = RotatingFileHandler('benchmark.log', 1000000, 1)
+        file_handler = RotatingFileHandler('benchmark.log', 'w', 1000000, 1)
         file_handler.setLevel(logging.DEBUG)
         file_handler.setFormatter(formatter)
         logging.getLogger().addHandler(file_handler)
