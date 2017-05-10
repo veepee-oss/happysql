@@ -195,7 +195,8 @@ def run_server():
             and not serverconf.get_conf()[FIELD_DEBUG]:
         logging.getLogger().setLevel(logging.INFO)
         formatter = logging.Formatter(
-            '%(asctime)s :: %(levelname)s :: %(message)s')
+            '%(asctime)s :: %(levelname)s :: %(message)s',
+            datefmt='%m/%d/%Y %H:%M:%S')
         file_handler = RotatingFileHandler('benchmark.log', 'w', 1000000, 1)
         file_handler.setLevel(logging.DEBUG)
         file_handler.setFormatter(formatter)
