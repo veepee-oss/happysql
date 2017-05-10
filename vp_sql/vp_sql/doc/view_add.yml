@@ -1,0 +1,13 @@
+Add user defined function
+---
+tags:
+  - queries
+
+responses:
+  200:
+    headers:
+      Content-Type:
+        type: application/json
+    description: Returns success or error depending on the query result
+  500:
+    description: Internal server error

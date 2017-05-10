@@ -2,14 +2,14 @@
 
 angular.module('myApp.nodes', ['ngCookies']).
 
-controller('nodesController', ['$scope', '$cookies', '$location', 'callDB', function($scope, $cookies, $location, callDB) {
+controller('nodesController', ['$scope', '$cookies', 'callDB', function($scope, $cookies, callDB) {
     $scope.svgContainer = d3.select("#graph")
 	.append("svg")
 	.attr("width", 2000)
 	.attr("height", 2000);
 
     var token = $cookies.get('token');
-    var call = "tables"
+    var call = "tables";
     var promise = callDB('GET', call, {'Authorization': token}, {});
 
     promise.then(function (response) {
@@ -35,11 +35,10 @@ controller('nodesController', ['$scope', '$cookies', '$location', 'callDB', func
 		.enter()
 		.append("svg:circle")
 		.attr("class", "node")
-		.attr("cx", function(d) { return d.x; }) // centre en posX = data.x
-		.attr("cy", function(d) { return d.y; }) // centre en posY = data.y
-		.attr("r", function(d) { return d.r; }) // rayon : 10px
+		.attr("cx", function(d) { return d.x; })
+		.attr("cy", function(d) { return d.y; })
+		.attr("r", function(d) { return d.r; })
 		.on("click", function(d) {
-		    // console.log(group.selectAll("ntxt .ntxt")._parents[0].childNodes.getElementsByTagName("text"));
 		    var groupNodes = group._groups[0][0].childNodes;
 		    var nbStartNodes = 2;
 		    // console.log(groupNodes);
@@ -63,8 +62,7 @@ controller('nodesController', ['$scope', '$cookies', '$location', 'callDB', func
 			response.data.forEach(function(element) {
 			    var x = (Math.cos(gap * i) * (10 * parseInt(d.r))) + d.x;
 			    var y = (Math.sin(gap * i) * (10 * parseInt(d.r))) + d.y;
-			    var tmpNode = {x: x, y: y, r: "20px", label: element.COLUMN_NAME};
-
+			    var tmpNode = { x: x, y: y, r: "20px", label: element.COLUMN_NAME };
 			    tableLinks.push({source: tmpNode, target: d});
 			    tableCircles.push(tmpNode);
 			    i = i + 1

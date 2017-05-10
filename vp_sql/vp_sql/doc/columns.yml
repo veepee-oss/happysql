@@ -1,0 +1,18 @@
+Columns query
+---
+tags:
+  - queries
+
+parameters:
+  - name: table
+    in: path
+    decription: Table you need
+    required: true
+    type: string
+
+responses:
+  200:
+    headers:
+      Content-Type:
+        type: application/json
+    description: Returns success or error depending on the query result
