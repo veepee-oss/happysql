@@ -203,8 +203,9 @@ def select(cursor, table_name, params):
     if len(select_params) == 0:
         select_query += "*,"
     for param in select_params:
-        select_query += "?,"
-        arguments.append(param)
+        select_query += param + ","
+        # select_query += "?,"
+        # arguments.append(param)
     select_query = select_query[:-1]
 
     select_query += " FROM " + table_name
