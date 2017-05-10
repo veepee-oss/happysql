@@ -4,7 +4,7 @@ import logging
 import cohandler
 import database_call
 import serverconf
-import werkzeug.serving
+import benchmark
 from flask import Flask, request, abort, \
     render_template, jsonify, Response
 from flask_apscheduler import APScheduler
@@ -13,15 +13,15 @@ from flask_cors import CORS
 from flask_swagger import swagger
 from gevent.pool import Pool
 from gevent.pywsgi import WSGIServer
+from logging.handlers import RotatingFileHandler
 from serverconf import FIELD_PORT, FIELD_IP, FIELD_MAX_USERS, \
-    FIELD_SERVER_TIMEOUT
+    FIELD_SERVER_TIMEOUT, FIELD_DEBUG, FIELD_BENCHMARK
 
 COMPRESS_MIMETYPES = ['text/html', 'text/css', 'text/xml', 'application/json',
                       'application/javascript']
 COMPRESS_LEVEL = 6
 COMPRESS_MIN_SIZE = 500
 
-logging.basicConfig(level=logging.DEBUG)
 app = Flask(__name__)
 CORS(app, supports_credentials=True)
 Compress(app)
@@ -163,8 +163,22 @@ def select(table):
 def spec():
     swag = swagger(app, from_file_keyword='swagger_from_file')
     swag['info']['version'] = "0.5"
-    swag['info']['title'] = "SQLServer REST API"
+    swag['info']['title'] = "HappySQL"
     return jsonify(swag)
+
+
+@app.before_request
+def before_request(resp=None):
+    if serverconf.get_conf()[FIELD_BENCHMARK]:
+        benchmark.benchmark_start()
+    return resp
+
+
+@app.after_request
+def after_request(resp=None):
+    if serverconf.get_conf()[FIELD_BENCHMARK]:
+        benchmark.benchmark_stop(request.endpoint)
+    return resp
 
 
 class Config(object):
@@ -181,14 +195,33 @@ class Config(object):
     SCHEDULER_API_ENABLED = True
 
 
-@werkzeug.serving.run_with_reloader
 def run_server():
+    global app
     serverconf.load_server_conf()
+
+    if serverconf.get_conf()[FIELD_BENCHMARK] \
+            and not serverconf.get_conf()[FIELD_DEBUG]:
+        logging.getLogger().setLevel(logging.INFO)
+        formatter = logging.Formatter(
+            '%(asctime)s :: %(levelname)s :: %(message)s')
+        file_handler = RotatingFileHandler('benchmark.log', 'w', 1000000, 1)
+        file_handler.setLevel(logging.DEBUG)
+        file_handler.setFormatter(formatter)
+        logging.getLogger().addHandler(file_handler)
+        steam_handler = logging.StreamHandler()
+        steam_handler.setLevel(logging.DEBUG)
+        logging.getLogger().addHandler(steam_handler)
+        logging.warn("Benchmark mode enabled!")
+    elif serverconf.get_conf()[FIELD_DEBUG]:
+        logging.getLogger().setLevel(logging.DEBUG)
+        logging.warn("Debug mode enabled!")
+
     app.config.from_object(Config())
     app.config.from_envvar('FLASKR_SETTINGS', silent=True)
+    # app.wsgi_app = benchmark.SimpleMiddleWare(app.wsgi_app)
 
-    # Debug enabled
-    app.debug = True
+    if serverconf.get_conf()[FIELD_DEBUG]:
+        app.debug = True
 
     cohandler.refresh_secret()
     scheduler = APScheduler()

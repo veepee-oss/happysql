@@ -1,0 +1,32 @@
+{
+  "compilerOptions": {
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "module": "commonjs",
+    "target": "es5",
+    "noImplicitAny": false,
+    "sourceMap": true,
+    "pretty": true,
+    "moduleResolution": "node",
+    "types": [
+      "jasmine",
+      "should",
+      "webpack"
+    ],
+    "outDir": "dist",
+    "lib": [
+      "dom", "es2016", "dom.iterable"
+    ],
+    "noEmitHelpers": false
+  },
+  "compileOnSave": false,
+  "exclude": [
+    "node_modules",
+    "dist"
+  ],
+  "awesomeTypescriptLoaderOptions": {
+    "resolveGlobs": true,
+    "forkChecker": true,
+    "useWebpackText": true
+  }
+}

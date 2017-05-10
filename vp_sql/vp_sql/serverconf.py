@@ -21,6 +21,8 @@ FIELD_SQL_TIMEOUT = "SQLTimeout"
 FIELD_IP = "Ip"
 FIELD_MAX_USERS = "MaxUsers"
 FIELD_SERVER_TIMEOUT = "ServerTimeout"
+FIELD_DEBUG = "Debug"
+FIELD_BENCHMARK = "Benchmark"
 
 WARNING_BAD_CONF_FILE = "Configuration file not found! Using default values."
 
@@ -47,6 +49,10 @@ def load_server_conf():
                              DEFAULT_SERVER_TIMEOUT)
     parser.add_argument("--file", type=str,
                         help="load server's configuration from file")
+    parser.add_argument("-d", "--debug", action="store_true",
+                        help="activate debug mode")
+    parser.add_argument("-b", "--benchmark", action="store_true",
+                        help="activate benchmark mode")
     args = parser.parse_args()
     if args.file is not None:
         load_server_conf_from_file(args)
@@ -56,7 +62,9 @@ def load_server_conf():
     SERVER_CONF_DIC[FIELD_IP] = args.ip
     SERVER_CONF_DIC[FIELD_MAX_USERS] = args.max_users
     SERVER_CONF_DIC[FIELD_SERVER_TIMEOUT] = args.server_timeout
-    logging.info(SERVER_CONF_DIC)
+    SERVER_CONF_DIC[FIELD_DEBUG] = args.debug
+    SERVER_CONF_DIC[FIELD_BENCHMARK] = args.benchmark
+    logging.debug(SERVER_CONF_DIC)
 
 
 def load_server_conf_from_file(args):
