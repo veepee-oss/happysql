@@ -36,7 +36,7 @@ def find_benchmark(lines):
 def write_to_file(res_file):
     file = open(BENCHMARK_DEST_FILE, 'w')
     for i in res_file:
-        file.write(i[0] + ',' + i[2] + '\n')
+        file.write(i[0] + ',' + i[1] + ',' + i[2] + '\n')
 
 
 def choose_request():
