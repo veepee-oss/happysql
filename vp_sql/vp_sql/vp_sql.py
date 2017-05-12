@@ -5,6 +5,7 @@ import cohandler
 import database_call
 import serverconf
 import benchmark
+import datetime
 from flask import Flask, request, abort, \
     render_template, jsonify, Response
 from flask_apscheduler import APScheduler
@@ -205,21 +206,38 @@ def run_server():
         formatter = logging.Formatter(
             '%(asctime)s :: %(levelname)s :: %(message)s',
             datefmt='%m/%d/%Y %H:%M:%S')
-        file_handler = RotatingFileHandler('benchmark.log', 'w', 1000000, 1)
+        file_handler = RotatingFileHandler('logs/benchmark_' +
+                                           datetime.datetime.now().strftime(
+                                               '%Y_%m_%d_%H_%M_%S') + '.log',
+                                           'w',
+                                           1000000, 1)
+        file_handler.setLevel(logging.INFO)
+        file_handler.setFormatter(formatter)
+        logging.getLogger().addHandler(file_handler)
+        steam_handler = logging.StreamHandler()
+        steam_handler.setLevel(logging.INFO)
+        logging.getLogger().addHandler(steam_handler)
+        logging.warn("Benchmark mode enabled!")
+    elif serverconf.get_conf()[FIELD_DEBUG]:
+        logging.getLogger().setLevel(logging.DEBUG)
+        formatter = logging.Formatter(
+            '%(asctime)s :: %(levelname)s :: %(message)s',
+            datefmt='%m/%d/%Y %H:%M:%S')
+        file_handler = RotatingFileHandler('logs/debug_' +
+                                           datetime.datetime.now().strftime(
+                                               '%Y_%m_%d_%H_%M_%S') + '.log',
+                                           'w',
+                                           1000000, 1)
         file_handler.setLevel(logging.DEBUG)
         file_handler.setFormatter(formatter)
         logging.getLogger().addHandler(file_handler)
         steam_handler = logging.StreamHandler()
         steam_handler.setLevel(logging.DEBUG)
         logging.getLogger().addHandler(steam_handler)
-        logging.warn("Benchmark mode enabled!")
-    elif serverconf.get_conf()[FIELD_DEBUG]:
-        logging.getLogger().setLevel(logging.DEBUG)
         logging.warn("Debug mode enabled!")
 
     app.config.from_object(Config())
     app.config.from_envvar('FLASKR_SETTINGS', silent=True)
-    # app.wsgi_app = benchmark.SimpleMiddleWare(app.wsgi_app)
 
     if serverconf.get_conf()[FIELD_DEBUG]:
         app.debug = True

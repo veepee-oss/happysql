@@ -1,6 +1,7 @@
 import argparse
 import re
 import logging
+import datetime
 
 BENCHMARK_FILE = "benchmark.log"
 BENCHMARK_REGEX = r'^(.*) :: INFO :: BENCHMARK : (.+) = ([0-9]+.[0-9]+)$'
@@ -40,14 +41,31 @@ def write_to_file(res_file):
 
 
 def choose_request():
+    global BENCHMARK_DEST_FILE
+    global BENCHMARK_FILE
     parser = argparse.ArgumentParser(description="Parse HappySQL log file.")
     parser.add_argument("-r", "--request", type=str, default=None,
-                        help="server's port (default: ALL)")
+                        help="benchmarked request (default: ALL)")
+    parser.add_argument("-i", "--input", type=str, required=True,
+                        help="input file name")
+    parser.add_argument("-o", "--output", type=str, default=None,
+                        help="output file name (default: "
+                             "benchmark_<query>_<timestamp>.csv")
     args = parser.parse_args()
+    BENCHMARK_FILE = args.input
+    BENCHMARK_DEST_FILE = args.output
+    if BENCHMARK_DEST_FILE is None:
+        str_req = "" if args.request is None else args.request
+        BENCHMARK_DEST_FILE = 'csv/benchmark_' + str_req + '_'\
+                              + datetime.datetime.now().strftime(
+                                '%Y_%m_%d_%H_%M_%S')\
+                              + '.csv'
     return args.request
+
 
 if __name__ == "__main__":
     try:
+        print("Parsing...")
         req = choose_request()
         lines = parse_lines(req)
         res_file = find_benchmark(lines)
