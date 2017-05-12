@@ -15,7 +15,7 @@ token = ""
 def help():
     log.info("+-----------------------------------------+")
     log.info("| CONNECT {user} {pass} {dbname} {server} |")
-    log.info("| SELECT {table}                          |")
+    log.info("| SELECT {table} [Columns,...]            |")
     log.info("+-----------------------------------------+")
     pass
 
@@ -26,9 +26,9 @@ def select_columns(all_columns, json):
         for elem in all_columns:
             try:
                 final_line = final_line + " " + str(line[elem])[:20] + " " * (20 - len(str(line[elem]))) + " |"
-            except:
+            except Exception as e:
                 final_line = final_line + " ERROR" + " " * (20 - len("ERROR")) + " |"
-        log.info(final_line)    
+        log.info(final_line)
 
 
 def select_all(args):
@@ -87,7 +87,7 @@ def connect(args):
     data = {"user": args[1], "password": args[2], "dbname": args[3], "server": args[4]}
     r = requests.post(url, data=data)
     json = r.json()
-    if json['success'] == True:
+    if json['success'] is True:
         log.info("-----------TABLES-----------")
         for elem in json['tables']:
             log.info(elem['table_schema'] + "." + elem['table_name'])
@@ -114,6 +114,6 @@ def read_until_exit():
     except Exception as e:
         log.info(e)
         log.info("You left without saying goodbye :-(")
-        
+
 
 read_until_exit()
