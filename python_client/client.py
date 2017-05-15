@@ -17,7 +17,6 @@ def help():
     log.info("| CONNECT {user} {pass} {dbname} {server} |")
     log.info("| SELECT {table} [Columns,...]            |")
     log.info("+-----------------------------------------+")
-    pass
 
 
 def select_columns(all_columns, json):
