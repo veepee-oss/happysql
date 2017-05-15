@@ -120,7 +120,7 @@ def where(params):
     special_words = ["select", "order", "group", "limit", "offset"]
     tab = {
         "eq": "LIKE", "gte": ">=", "gt": ">", "lte": "<=", "lt": "<",
-        "neq": "NOT LIKE", "like": "LIKE", "is": "IS"
+        "neq": "NOT LIKE", "like": "LIKE", "is": "IS", "between": "BETWEEN"
     }
     for key in params.keys():
         if key in special_words:
@@ -129,8 +129,13 @@ def where(params):
         for elem in split:
             a = True
             value = elem.split('.')
-            if len(value) == 2:
-                final += key + " " + tab[value[0]] + " '" + value[1] + "' and "
+            if len(value) >= 2:
+                # final += key + " " + tab[value[0]] + " '" + value[1] + "' and "
+                final += key + " " + tab[value[0]] + " "
+                i = 1
+                while i < len(value):
+                    final += value[i] + " and "
+                    i += 1
             else:
                 value[0] = value[0].replace("'", "\\'")
                 value[0] = value[0].replace('"', '\\"')
@@ -201,13 +206,19 @@ def select(cursor, table_name, params):
         select_params, join_params = separate_select_params(params["select"])
     if len(select_params) == 0:
         select_query += "*,"
+    row = False
     for param in select_params:
+        if param == "ROW_NUMBER":
+            row = True
+            continue
         select_query += param + ","
         # select_query += "?,"
         # arguments.append(param)
     select_query = select_query[:-1]
-
-    select_query += " FROM " + table_name
+    if row == False:
+        select_query += " FROM " + table_name
+    else:
+        select_query += " FROM (select *, ROW_NUMBER() OVER (ORDER BY Id) ROW_NUMBER from " + table_name + ") AS A " 
     select_query += where(params)
 
     if "order" in params.keys():
