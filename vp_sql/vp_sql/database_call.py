@@ -91,6 +91,7 @@ def execute_request(cursor, query, args):
     try:
         cursor.execute(query, *args)
     except Exception as e:
+        logging.error("zob")
         logging.error(e)
         return {'success': False}
     keys = []
