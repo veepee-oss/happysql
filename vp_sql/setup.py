@@ -14,6 +14,6 @@ setup(
         'pyodbc',
         'gevent',
         'PyJWT',
-        'python-dateutil'
+        'python-dateutil',
         ],
 )
