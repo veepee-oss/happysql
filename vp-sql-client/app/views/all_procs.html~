@@ -1,5 +1,0 @@
-<div class="collection container center-align">
-  <div ng-repeat="proc in procs">
-    <a href="#!/proc/{{proc}}" class="collection-item">{{view.name}}</a>
-  </div>
-</div>
