@@ -71,6 +71,8 @@ def connect(token=None, params=dict()):
                 logging.error(e)
                 return None, "missing parameters"
             token = jwt.encode(tok, JWT_SECRET, algorithm=JWT_ALGORITHM)
+        tok[TOKEN_SERVER] = tok[TOKEN_SERVER].replace(':', ',')
+        logging.debug(tok[TOKEN_SERVER])
         co = pyodbc.connect(r'DRIVER={' +
                             serverconf.get_conf()[FIELD_SQL_DRIVER] + r'};'
                             r'SERVER=' + tok[TOKEN_SERVER] + r';'
