@@ -1,0 +1,12 @@
+--- SIGCHLD {si_signo=SIGCHLD, si_code=CLD_EXITED, si_pid=13089, si_uid=1000, si_status=0, si_utime=0, si_stime=0} ---
+--- SIGCHLD {si_signo=SIGCHLD, si_code=CLD_EXITED, si_pid=13090, si_uid=1000, si_status=0, si_utime=0, si_stime=0} ---
+--- SIGCHLD {si_signo=SIGCHLD, si_code=CLD_EXITED, si_pid=13091, si_uid=1000, si_status=0, si_utime=0, si_stime=0} ---
+--- SIGINT {si_signo=SIGINT, si_code=SI_KERNEL} ---
+--- SIGINT {si_signo=SIGINT, si_code=SI_KERNEL} ---
+--- SIGINT {si_signo=SIGINT, si_code=SI_KERNEL} ---
+--- SIGINT {si_signo=SIGINT, si_code=SI_KERNEL} ---
+--- SIGINT {si_signo=SIGINT, si_code=SI_KERNEL} ---
+--- SIGINT {si_signo=SIGINT, si_code=SI_KERNEL} ---
+--- SIGINT {si_signo=SIGINT, si_code=SI_KERNEL} ---
+--- SIGHUP {si_signo=SIGHUP, si_code=SI_USER, si_pid=12409, si_uid=1000} ---
++++ killed by SIGHUP +++
