@@ -38,7 +38,9 @@ def call_db(token, db_call, table_name, params):
     guid = database_call.get_constraint(cursor, table_name)
     logging.debug(guid)
     value = db_call(cursor, table_name, params)
+    benchmark.delay_start()     # Benchmarking delay
     co.commit()
+    benchmark.delay_stop()  # Benchmarking delay
     resp = jsonify(value)
     resp.headers['Access-Control-Expose-Headers'] = 'X-Guid'
     resp.headers['X-Guid'] = guid

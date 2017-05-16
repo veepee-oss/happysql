@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import logging
+import benchmark
 from dateutil.parser import parse
 
 
@@ -88,12 +89,14 @@ def execute_request(cursor, query, args):
     query = query.replace("--", "")
     query = query.replace("#", "")
     logging.debug(query + " | {}".format(args))
+    benchmark.delay_start()     # Benchmarking delay
     try:
         cursor.execute(query, *args)
     except Exception as e:
         logging.error("zob")
         logging.error(e)
         return {'success': False}
+    benchmark.delay_stop()  # Benchmarking delay
     keys = []
     for elem in cursor.description:
         keys.append(elem[0])
