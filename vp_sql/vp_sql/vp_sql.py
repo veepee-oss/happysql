@@ -70,7 +70,7 @@ def change_credz():
 def get_tables():
     """
     Get all tables
-    
+
     swagger_from_file: doc/tables.yml
     """
     token = request.headers.get("Authorization")

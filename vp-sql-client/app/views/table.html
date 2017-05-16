@@ -1,82 +1,83 @@
 <div>
-    <div class="row">
-        <div class="col s3 left-align">
-            <br><br><br><br><br><br>
-            <div ng-repeat="call in lastCalls">
-                <div class="col s8">
-                    <input id="call{{$index + 1}}" type="text" value="{{call}}">
-                </div>
-                <div class="col s1">
-                <button class="btn btn-floating waves-effect waves-light"
-                        ngclipboard data-clipboard-target="#call{{$index + 1}}"
-                        onclick="Materialize.toast('Copied!', 1000)">
-                    <i class="petite material-icons">library_books</i>
-                </button>
-                </div>
-                <!--<pre><code>{{call}}</code></pre>-->
-                <!-- <input type="text" value="{{call}}"/> -->
-            </div>
+  <div class="row">
+    <div class="col s3 left-align">
+      <br><br><br><br><br><br>
+      <div ng-repeat="call in lastCalls">
+        <div class="col s8">
+          <input id="call{{$index + 1}}" type="text" value="{{call}}">
         </div>
-        <div class="col s9 container center-align">
-            <h3>Table : {{table}}</h3>
-            <p>{{error}}</p>
-            <br/>
-
-            <div class="preloader-background">
-                <h3>{{table}}</h3>
-                <p>{{error}}</p>
-                <div class="preloader-wrapper big active">
-                    <div class="spinner-layer spinner-red-only">
-                        <div class="circle-clipper left">
-                            <div class="circle"></div>
-                        </div>
-                        <div class="gap-patch">
-                            <div class="circle"></div>
-                        </div>
-                        <div class="circle-clipper right">
-                            <div class="circle"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            Search: <input ng-model="query" />
-            <div infinite-scroll="addMoreItems()">
-                <table class="striped responsive-table">
-                    <thead>
-                    <tr>
-                        <th ng-repeat="column in columns">
-              <!-- <button class="btn waves-effect waves-light" ng-click="sortBy(column.name)">{{column
-              .name}}</button> -->
-              {{column.COLUMN_NAME}}
-            </th>
-            <th>Delete</th>
-                        <th>Modify</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr ng-repeat="data in datas | filter:query | orderBy: order:reverse">
-                        <td ng-repeat="column in columns"> {{data[column.COLUMN_NAME]}} </td>
-                        <td><a class="waves-effect waves-light btn" ng-click="deleteElement(data[guid])">
-                            <i class="material-icons">delete</i>
-                        </a></td>
-
-                        <td ng-show="guid !== ''"><a class="waves-effect waves-light btn"
-                                                      ng-href="#!/table/{{table}}/{{guid}}/{{data[guid]}}">
-                            <i class="material-icons">description</i>
-                        </a></td>
-                        <td ng-show="guid === ''"><a class="waves-effect waves-light btn disabled">
-                            <i class="material-icons">description</i>
-                        </a></td>
-
-                    </tr>
-                    </tbody>
-                </table>
-                <br>
-                <a class="waves-effect waves-light btn" ng-click="addMoreItems()">
-                    <i class="material-icons">forward_5</i>
-                </a>
-            </div>
+        <div class="col s1">
+          <button class="btn btn-floating waves-effect waves-light"
+                  ngclipboard data-clipboard-target="#call{{$index + 1}}"
+                  onclick="Materialize.toast('Copied!', 1000)">
+            <i class="petite material-icons">library_books</i>
+          </button>
         </div>
+        <!--<pre><code>{{call}}</code></pre>-->
+        <!-- <input type="text" value="{{call}}"/> -->
+      </div>
     </div>
+    <div class="col s9 container center-align overflow: auto;">
+      <h3>Table : {{table}}</h3>
+      <p>{{error}}</p>
+      <br/>
+
+      <div class="preloader-background">
+        <h3>{{table}}</h3>
+        <p>{{error}}</p>
+        <div class="preloader-wrapper big active">
+          <div class="spinner-layer spinner-red-only">
+            <div class="circle-clipper left">
+              <div class="circle"></div>
+            </div>
+            <div class="gap-patch">
+              <div class="circle"></div>
+            </div>
+            <div class="circle-clipper right">
+              <div class="circle"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      Search: <input ng-model="query" />
+      <div infinite-scroll="addMoreItems()">
+        <table class="striped responsive-table">
+          <thead>
+            <tr>
+              <th ng-repeat="column in columns">
+		<!-- <button class="btn waves-effect waves-light" ng-click="sortBy(column.name)">{{column
+		     .name}}</button> -->
+		{{column.COLUMN_NAME}}
+              </th>
+              <th>Delete</th>
+              <th>Modify</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="data in datas | filter:query | orderBy: order:reverse">
+              <td ng-repeat="column in columns"> {{data[column.COLUMN_NAME]}} </td>
+              <td><a class="waves-effect waves-light btn" ng-click="deleteElement(data[guid])">
+                  <i class="material-icons">delete</i>
+              </a></td>
+
+              <td ng-show="guid !== ''"><a class="waves-effect waves-light btn"
+                                           ng-href="#!/table/{{table}}/{{guid}}/{{data[guid]}}">
+                  <i class="material-icons">description</i>
+              </a></td>
+              <td ng-show="guid === ''"><a class="waves-effect waves-light btn disabled">
+                  <i class="material-icons">description</i>
+              </a></td>
+
+            </tr>
+          </tbody>
+        </table>
+        <br>
+        <a class="waves-effect waves-light btn" ng-click="addMoreItems()">
+          <i class="material-icons">forward_5</i>
+        </a>
+	<!-- <div class="spacer" style="clear: both;"></div> -->
+      </div>
+    </div>
+  </div>
 </div>

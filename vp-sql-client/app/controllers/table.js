@@ -47,15 +47,21 @@ angular.module('myApp.table', ['ngCookies', 'ngclipboard']).controller('TableCtr
 
     $scope.addMoreItems = function () {
         var call = $scope.table + "?limit=" + $scope.limit + "&offset=" + $scope.offset;
+
+	// for sqlServer < 2012
+	// var call = $scope.table + "?select=*,ROW_NUMBER&ROW_NUMBER=between." + $scope.offset + "." + $scope.offset + $scope.limit;
+	
         var datasPromise = callDB('GET', call, {'Authorization': $scope.token}, {});
-        $scope.lastCalls.push("GET " + call);
-        console.log($scope.lastCalls);
+        // $scope.lastCalls.push("GET " + call);
+        // console.log($scope.lastCalls);
         $scope.offset += $scope.limit;
         datasPromise.then(function (response) {
-            if (response.length === 0) {
+	    // console.log(response)
+            if (response.data.length === 0) {
                 $scope.offset -= $scope.limit;
             } else {
                 $scope.datas = $scope.datas.concat(response.data);
+		$scope.lastCalls.push("GET " + call);
             }
         }, function (error) {
             $scope.error = error;
