@@ -1,16 +1,13 @@
-
-gnuplot> set title 'Benchmark - HappySQL: 1 select(10) over 10 minutes'  
-gnuplot> unset multiplot
-gnuplot> set xdata time
-gnuplot> set style data lines
-gnuplot> set term png size 2048,1080
-gnuplot> set timefmt '%m/%d/%Y %H:%M:%S'
-gnuplot> set format x '%M:%S'  
-gnuplot> set xlabel 'Time'
-gnuplot> set ylabel 'Excution time'
-gnuplot> set ylabel 'Execution time'  
-gnuplot> set autoscale y
-gnuplot> set datafile separator ','
-gnuplot> set output 'Benchmark - HappySQL - 1 select(10)'  
-gnuplot> plot 'C:\Users\Anis Bennabi\Documents\Vente-privée\Git\happysql\vp_sql\vp_sql\benchmark_graph.csv' using 1:3 smooth bezier
-gnuplot> 
+set title 'Benchmark - HappySQL: 1 select(10) over 10 minutes'  
+unset multiplot
+set xdata time
+set style data lines
+set term png size 2048,1080
+set timefmt '%m/%d/%Y %H:%M:%S'
+set format x '%M:%S'  
+set xlabel 'Time'
+set ylabel 'Execution time'  
+set autoscale y
+set datafile separator ','
+set output 'Benchmark - HappySQL - 1 select(10)'  
+plot 'C:\Users\Anis Bennabi\Documents\Vente-privée\Git\happysql\vp_sql\benchmarking_tool\csv\benchmark_select_2017_05_16_11_22_23.csv' using 1:3 smooth bezier title "1 select(limit=100&offset=5000) / 10 minutes"
