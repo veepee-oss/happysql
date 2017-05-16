@@ -14,7 +14,8 @@ angular.module('myApp', [
     'myApp.connection',
     'myApp.table',
     'myApp.view',
-    'myApp.nodes'
+    'myApp.nodes',
+    'myApp.procs'
 ]).
 
 config(['$locationProvider', '$routeProvider', '$httpProvider', function($locationProvider, $routeProvider, $httpProvider) {
@@ -51,6 +52,14 @@ config(['$locationProvider', '$routeProvider', '$httpProvider', function($locati
 	.when('/graph', {
 	    templateUrl: 'views/d3test.html',
 	    controller: 'nodesController'
+	})
+	.when('/procs', {
+	    templateUrl: 'views/all_procs.html',
+	    controller: 'allProcsController'
+	})
+	.when('/proc/:procName', {
+	    templateUrl: 'views/proc.html',
+	    controller: 'proceduresController'
 	})
         .otherwise({redirectTo: '/connection'});
 }]).

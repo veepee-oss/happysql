@@ -150,6 +150,38 @@ def delete(table):
     return call_db(token, database_call.delete, table, args)
 
 
+@app.route('/sp', methods=['GET'])
+def get_procedure_names():
+    """
+    Get stored procedure names
+
+    """
+    token = request.headers.get("Authorization")
+    co, token = cohandler.connect(token=token)
+    if token is None or co is None:
+        abort(500)
+    cursor = co.cursor()
+    value = database_call.get_stored_procedure_name(cursor)
+    co.commit()
+    return jsonify(value)
+
+
+@app.route('/sp/<sp_name>', methods=['GET'])
+def get_procedure_code(sp_name):
+    """
+    Get stored procedure code
+
+    """
+    token = request.headers.get("Authorization")
+    co, token = cohandler.connect(token=token)
+    if token is None or co is None:
+        abort(500)
+    cursor = co.cursor()
+    value = database_call.get_stored_procedure_code(cursor, sp_name)
+    co.commit()
+    return jsonify(value)
+
+
 @app.route('/<table>', methods=['GET'])
 def select(table):
     """
