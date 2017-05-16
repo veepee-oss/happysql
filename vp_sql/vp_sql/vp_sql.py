@@ -211,8 +211,7 @@ def run_server():
         file_handler = RotatingFileHandler('logs/benchmark_' +
                                            datetime.datetime.now().strftime(
                                                '%Y_%m_%d_%H_%M_%S') + '.log',
-                                           'w',
-                                           1000000, 1)
+                                           'w')
         file_handler.setLevel(logging.INFO)
         file_handler.setFormatter(formatter)
         logging.getLogger().addHandler(file_handler)
@@ -228,8 +227,7 @@ def run_server():
         file_handler = RotatingFileHandler('logs/debug_' +
                                            datetime.datetime.now().strftime(
                                                '%Y_%m_%d_%H_%M_%S') + '.log',
-                                           'w',
-                                           1000000, 1)
+                                           'w')
         file_handler.setLevel(logging.DEBUG)
         file_handler.setFormatter(formatter)
         logging.getLogger().addHandler(file_handler)

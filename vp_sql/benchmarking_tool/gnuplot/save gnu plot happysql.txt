@@ -6,8 +6,13 @@ set term png size 2048,1080
 set timefmt '%m/%d/%Y %H:%M:%S'
 set format x '%M:%S'  
 set xlabel 'Time'
-set ylabel 'Execution time'  
-set autoscale y
+set ylabel 'Execution time'
+set ytics .01
+set mytics 5
+set yrange [0:0.1]
 set datafile separator ','
 set output 'Benchmark - HappySQL - 1 select(10)'  
 plot 'C:\Users\Anis Bennabi\Documents\Vente-privée\Git\happysql\vp_sql\benchmarking_tool\csv\benchmark_select_2017_05_16_11_22_23.csv' using 1:3 smooth bezier title "1 select(limit=100&offset=5000) / 10 minutes"
+
+
+set autoscale y
