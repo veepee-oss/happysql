@@ -88,11 +88,14 @@ def execute_request(cursor, query, args):
     query = query.replace("--", "")
     query = query.replace("#", "")
     logging.debug(query + " | {}".format(args))
+#    stock_time
     try:
         cursor.execute(query, *args)
     except Exception as e:
         logging.error(e)
         return {'success': False}
+#   stock time
+
     keys = []
     for elem in cursor.description:
         keys.append(elem[0])
@@ -215,7 +218,7 @@ def select(cursor, table_name, params):
         # select_query += "?,"
         # arguments.append(param)
     select_query = select_query[:-1]
-    if row == False:
+    if row is False:
         select_query += " FROM " + table_name
     else:
         select_query += " FROM (select *, ROW_NUMBER() OVER (ORDER BY Id) ROW_NUMBER from " + table_name + ") AS A " 
@@ -280,3 +283,33 @@ def function_store(cursor, name, params):
         logging.error(e)
         return {"success": False}
     return {"success": True}
+
+
+def get_stored_procedure_name(cursor):
+    try:
+        cursor.execute("SELECT name FROM dbo.sysobjects WHERE (TYPE = 'P')")
+    except Exception as e:
+        logging.error(e)
+        return {"success": False}
+    code = []
+    for row in cursor:
+        a = row[0].split('\n')
+        for line in a:
+            if len(line) > 0:
+                code.append(line)
+    return {"names": code}
+
+
+def get_stored_procedure_code(cursor, procName):
+    try:
+        cursor.execute("EXEC sp_helptext N'" + procName + "'")
+    except Exception as e:
+        logging.error(e)
+        return {"success": False}
+    code = []
+    for row in cursor:
+        a = row[0].split('\n')
+        for line in a:
+            if len(line) > 0:
+                code.append(line)
+    return {procName: code}

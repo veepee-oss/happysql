@@ -1,0 +1,6 @@
+'use strict';
+
+angular.module('myApp.view', ['ngCookies']).
+
+
+controller('proceduresController', ['$scope', '$cookies', '$location', 'callDB', function($scope, $cookies, $location, callDB) {
