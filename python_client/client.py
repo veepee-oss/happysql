@@ -15,7 +15,7 @@ token = ""
 def help():
     log.info("+-----------------------------------------+")
     log.info("| CONNECT {user} {pass} {dbname} {server} |")
-    log.info("| SELECT {table} [Columns,...]            |")
+    log.info("| GET {table} [Columns,...]            |")
     log.info("+-----------------------------------------+")
 
 
@@ -104,7 +104,7 @@ def read_until_exit():
                 break
             if sent[0] == "CONNECT":
                 connect(sent)
-            elif sent[0] == "SELECT":
+            elif sent[0] == "GET":
                 select(sent)
             elif sent[0] == "HELP":
                 help()
