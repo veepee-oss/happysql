@@ -49,7 +49,6 @@ def refresh_secret():
 
 
 def connect(token=None, params=dict()):
-    logging.debug(params)
     try:
         if token is not None:
             token = token.encode('utf-8')

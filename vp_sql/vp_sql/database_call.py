@@ -214,10 +214,8 @@ def select(cursor, table_name, params):
     for param in select_params:
         if param == "ROW_NUMBER":
             row = True
-            continue
-        select_query += param + ","
-        # select_query += "?,"
-        # arguments.append(param)
+        else:
+            select_query += param + ","
     select_query = select_query[:-1]
     if row is False:
         select_query += " FROM " + table_name
