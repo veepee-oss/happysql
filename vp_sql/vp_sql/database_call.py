@@ -286,7 +286,7 @@ def function_store(cursor, name, params):
     return {"success": True}
 
 
-def get_stored_procedure_name(cursor):
+def get_stored_procedure_name(cursor, p2, p3):
     try:
         cursor.execute("SELECT name FROM dbo.sysobjects WHERE (TYPE = 'P')")
     except Exception as e:
@@ -301,7 +301,7 @@ def get_stored_procedure_name(cursor):
     return {"names": code}
 
 
-def get_stored_procedure_code(cursor, procName):
+def get_stored_procedure_code(cursor, procName, p3):
     try:
         cursor.execute("EXEC sp_helptext N'" + procName + "'")
     except Exception as e:

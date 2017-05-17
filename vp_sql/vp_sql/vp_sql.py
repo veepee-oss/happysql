@@ -29,8 +29,9 @@ Compress(app)
 
 
 # db_call is the function call for database
-def call_db(token, db_call, table_name, params):
+def call_db(db_call, table_name, params):
     token = request.headers.get("Authorization")
+    logging.debug(token)
     co, token = cohandler.connect(token=token)
     if token is None or co is None:
         abort(500)
@@ -59,6 +60,7 @@ def change_credz():
 
     swagger_from_file: doc/change_credentials.yml
     """
+    # token = request.headers.get("Authorization")
     args = request.form.to_dict()
     co, token = cohandler.connect(params=args)
     if co is None:
@@ -75,8 +77,7 @@ def get_tables():
 
     swagger_from_file: doc/tables.yml
     """
-    token = request.headers.get("Authorization")
-    return call_db(token, database_call.get_tables, None, None)
+    return call_db(database_call.get_tables, None, None)
 
 
 @app.route('/rpc/<function_name>', methods=['POST'])
@@ -86,9 +87,8 @@ def view_call(function_name):
 
     swagger_from_file: doc/view_call.yml
     """
-    token = request.headers.get("Authorization")
     args = request.form.to_dict()
-    return call_db(token, database_call.function_call, function_name, args)
+    return call_db(database_call.function_call, function_name, args)
 
 
 @app.route('/rpc/views', methods=["GET"])
@@ -98,8 +98,7 @@ def get_views():
 
     swagger_from_file: doc/views.yml
     """
-    token = request.headers.get("Authorization")
-    return call_db(token, database_call.get_views, None, None)
+    return call_db(database_call.get_views, None, None)
 
 
 @app.route('/rpc/new', methods=["POST"])
@@ -109,9 +108,8 @@ def add_stored_function():
 
     swagger_from_file: doc/view_add.yml
     """
-    token = request.headers.get("Authorization")
     args = request.form.to_dict()
-    return call_db(token, database_call.function_store, None, params)
+    return call_db(database_call.function_store, None, params)
 
 
 @app.route('/<table>/columns', methods=['GET'])
@@ -121,8 +119,7 @@ def get_columns(table):
 
     swagger_from_file: doc/columns.yml
     """
-    token = request.headers.get("Authorization")
-    return call_db(token, database_call.get_columns, table, None)
+    return call_db(database_call.get_columns, table, None)
 
 
 @app.route('/<table>/<fieldId>', methods=['PUT'])
@@ -131,12 +128,11 @@ def update_user(table, fieldId):
     Update query
 
     """
-    token = request.headers.get("Authorization")
     args = request.form.to_dict()
     logging.debug(fieldId)
     args["fieldId"] = fieldId
     logging.debug(args['fieldId'])
-    return call_db(token, database_call.update, table, args)
+    return call_db(database_call.update, table, args)
 
 
 @app.route('/<table>', methods=['DELETE'])
@@ -145,9 +141,8 @@ def delete(table):
     Delete query
 
     """
-    token = request.headers.get("Authorization")
     args = request.form.to_dict()
-    return call_db(token, database_call.delete, table, args)
+    return call_db(database_call.delete, table, args)
 
 
 @app.route('/sp', methods=['GET'])
@@ -156,14 +151,15 @@ def get_procedure_names():
     Get stored procedure names
 
     """
-    token = request.headers.get("Authorization")
-    co, token = cohandler.connect(token=token)
-    if token is None or co is None:
-        abort(500)
-    cursor = co.cursor()
-    value = database_call.get_stored_procedure_name(cursor)
-    co.commit()
-    return jsonify(value)
+    return call_db(database_call.get_stored_procedure_name, None, None)
+    # token = request.headers.get("Authorization")
+    # co, token = cohandler.connect(token=token)
+    # if token is None or co is None:
+    #     abort(500)
+    # cursor = co.cursor()
+    # value = database_call.get_stored_procedure_name(cursor)
+    # co.commit()
+    # return jsonify(value)
 
 
 @app.route('/sp/<sp_name>', methods=['GET'])
@@ -172,14 +168,7 @@ def get_procedure_code(sp_name):
     Get stored procedure code
 
     """
-    token = request.headers.get("Authorization")
-    co, token = cohandler.connect(token=token)
-    if token is None or co is None:
-        abort(500)
-    cursor = co.cursor()
-    value = database_call.get_stored_procedure_code(cursor, sp_name)
-    co.commit()
-    return jsonify(value)
+    return call_db(database_call.get_stored_procedure_code, sp_name, None)
 
 
 @app.route('/<table>', methods=['GET'])
