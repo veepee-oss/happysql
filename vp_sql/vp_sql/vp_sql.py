@@ -24,7 +24,7 @@ COMPRESS_LEVEL = 6
 COMPRESS_MIN_SIZE = 500
 
 app = Flask(__name__)
-CORS(app, supports_credentials=True)
+CORS(app, supports_credentials=True, expose_headers='X-Guid')
 Compress(app)
 
 
@@ -45,7 +45,6 @@ def call_db(db_call, table_name, params):
     if serverconf.is_benchmark():
         benchmark.delay_stop()  # Benchmarking delay
     resp = jsonify(value)
-    resp.headers['Access-Control-Expose-Headers'] = 'X-Guid'
     resp.headers['X-Guid'] = guid
     return resp
 
