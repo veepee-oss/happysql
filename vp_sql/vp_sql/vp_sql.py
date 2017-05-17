@@ -178,9 +178,8 @@ def select(table):
 
     swagger_from_file: doc/select.yml
     """
-    token = request.headers.get("Authorization")
     args = request.args.to_dict()
-    return call_db(token, database_call.select, table, args)
+    return call_db(database_call.select, table, args)
 
 
 @app.route("/spec")
@@ -254,10 +253,10 @@ def run_server():
         steam_handler = logging.StreamHandler()
         steam_handler.setLevel(logging.INFO)
         logging.getLogger().addHandler(steam_handler)
-        logging.warn("Benchmark mode enabled!")
-
+        logging.warn("Debug mode enabled!")
     app.config.from_object(Config())
     app.config.from_envvar('FLASKR_SETTINGS', silent=True)
+    app.config['JSONIFY_PRETTYPRINT_REGULAR'] = False
 
     if serverconf.is_debug():
         app.debug = True
