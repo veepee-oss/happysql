@@ -20,27 +20,29 @@ JWT_ALGORITHM = 'HS256'
 JWT_EXP_DELTA_HOURS = 1
 
 
-# transation_dict = {}
+''' Transaction code, to be implemented'''
+'''
+transation_dict = {}
 
 
-# def check_transaction(params, tok):
-#     global transation_dict
+def check_transaction(params, tok):
+    global transation_dict
 
-#     if params['cookie'] in transation_dict.keys():
-#         return params['cookie'], transation_dict[params['cookie']]
-#     else:
-#         co = pyodbc.connect(r'DRIVER={' +
-#                             serverconf.get_conf()[FIELD_SQL_DRIVER] + r'};'
-#                             r'SERVER=' + tok[TOKEN_SERVER] + r';'
-#                             r'DATABASE=' + tok[TOKEN_DB_NAME] + r';'
-#                             r'UID=' + tok[TOKEN_USER] + r';'
-#                             r'PWD=' + tok[TOKEN_PASSWORD],
-#                             timeout=serverconf.get_conf()[FIELD_SQL_TIMEOUT])
-#         # gen_cookie
-#         cookie = "lol"
-#         transation_dict.cookie = co
-#         return cookie, co
-
+    if params['cookie'] in transation_dict.keys():
+        return params['cookie'], transation_dict[params['cookie']]
+    else:
+        co = pyodbc.connect(r'DRIVER={' +
+                            serverconf.get_conf()[FIELD_SQL_DRIVER] + r'};'
+                            r'SERVER=' + tok[TOKEN_SERVER] + r';'
+                            r'DATABASE=' + tok[TOKEN_DB_NAME] + r';'
+                            r'UID=' + tok[TOKEN_USER] + r';'
+                            r'PWD=' + tok[TOKEN_PASSWORD],
+                            timeout=serverconf.get_conf()[FIELD_SQL_TIMEOUT])
+        # gen_cookie
+        cookie = "lol"
+        transation_dict.cookie = co
+        return cookie, co
+'''
 
 def refresh_secret():
     global JWT_SECRET

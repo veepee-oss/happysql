@@ -7,14 +7,14 @@ from dateutil.parser import parse
 
 def get_constraint(cursor, table_name):
     if table_name is not None:
-        query = "SELECT TABLE_NAME, TABLE_SCHEMA, COLUMN_NAME, CONSTRAINT_NAME " \
-                "FROM INFORMATION_SCHEMA.CONSTRAINT_COLUMN_USAGE"
+        query = "SELECT TABLE_NAME, TABLE_SCHEMA, COLUMN_NAME, " \
+                "CONSTRAINT_NAME FROM " \
+                "INFORMATION_SCHEMA.CONSTRAINT_COLUMN_USAGE"
         sql_response = execute_request(cursor, query, [])
         for i in sql_response:
             if i['CONSTRAINT_NAME'].find("PK__") != -1:
-                if i['TABLE_NAME'] == table_name.replace(i['TABLE_SCHEMA'] + ".",
-                                                         "",
-                                                         1):
+                if i['TABLE_NAME'] == table_name.replace(
+                                i['TABLE_SCHEMA']+ ".", "", 1):
                     logging.debug(i['COLUMN_NAME'])
                     return i['COLUMN_NAME']
         logging.warn("Primary key not found! Table is in read only mode.")
@@ -93,7 +93,6 @@ def execute_request(cursor, query, args):
     try:
         cursor.execute(query, *args)
     except Exception as e:
-        logging.error("zob")
         logging.error(e)
         return {'success': False}
     benchmark.delay_stop()  # Benchmarking delay
@@ -134,7 +133,6 @@ def where(params):
             a = True
             value = elem.split('.')
             if len(value) >= 2:
-                # final += key + " " + tab[value[0]] + " '" + value[1] + "' and "
                 final += key + " " + tab[value[0]] + " "
                 i = 1
                 while i < len(value):
@@ -186,7 +184,7 @@ def separate_select_params(params):
 def inner_join(table_name, join_params):
     query = ""
     if len(join_params) == 0:
-        return (query)
+        return query
     for key, value in join_params.items():
         query += " INNER JOIN (SELECT "
         for val in value:
@@ -216,13 +214,12 @@ def select(cursor, table_name, params):
             row = True
             continue
         select_query += param + ","
-        # select_query += "?,"
-        # arguments.append(param)
     select_query = select_query[:-1]
     if row is False:
         select_query += " FROM " + table_name
     else:
-        select_query += " FROM (select *, ROW_NUMBER() OVER (ORDER BY Id) ROW_NUMBER from " + table_name + ") AS A " 
+        select_query += " FROM (select *, ROW_NUMBER() OVER (ORDER BY Id) " \
+                        "ROW_NUMBER from " + table_name + ") AS A "
     select_query += where(params)
 
     if "order" in params.keys():

@@ -1,8 +1,8 @@
 import logging
 import time
 
-START_TIME = None
-DELAY_START = None
+START_TIME = 0.0
+DELAY_START = 0.0
 
 
 def benchmark_start():
