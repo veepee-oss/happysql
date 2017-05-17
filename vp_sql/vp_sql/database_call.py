@@ -212,8 +212,8 @@ def select(cursor, table_name, params):
     for param in select_params:
         if param == "ROW_NUMBER":
             row = True
-            continue
-        select_query += param + ","
+        else:
+            select_query += param + ","
     select_query = select_query[:-1]
     if row is False:
         select_query += " FROM " + table_name
@@ -283,7 +283,7 @@ def function_store(cursor, name, params):
     return {"success": True}
 
 
-def get_stored_procedure_name(cursor):
+def get_stored_procedure_name(cursor, p2, p3):
     try:
         cursor.execute("SELECT name FROM dbo.sysobjects WHERE (TYPE = 'P')")
     except Exception as e:
@@ -298,7 +298,7 @@ def get_stored_procedure_name(cursor):
     return {"names": code}
 
 
-def get_stored_procedure_code(cursor, procName):
+def get_stored_procedure_code(cursor, procName, p3):
     try:
         cursor.execute("EXEC sp_helptext N'" + procName + "'")
     except Exception as e:
