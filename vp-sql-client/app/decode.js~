@@ -1,3 +1,0 @@
-// ctp={%22cid%22%3a%22saxclientident%22%2c%22ct%22%3a%22sx%22%2c%22ssp%22%3atrue%2c%22vs%22%3afalse%2c%22ivty%22%3a%22sxfc%22%2c%22ivd%22%3a%2277570665527540b4b4a8e96251afa9f8%22%2c%22vw%22%3anull%2c%22mi%22%3anull}
-
-console.log(decodeURIComponent(uri_enc));
