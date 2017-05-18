@@ -26,7 +26,6 @@ controller('proceduresController', ['$scope', '$cookies', '$location', 'callDB',
     });
 
     $scope.alter = function() {
-	console.log("YOLO");
 	var data = {"query": $scope.data};
 	call = "sp/new";
 	var promise = callDB('POST', call, {'Authorization': token}, data);
