@@ -272,8 +272,8 @@ def run_server():
     http_server = WSGIServer((serverconf.get_conf()[FIELD_IP],
                               serverconf.get_conf()[FIELD_PORT]),
                              app, spawn=pool)
-    http_server.serve_forever(stop_timeout=
-                              serverconf.get_conf()[FIELD_SERVER_TIMEOUT])
+    http_server.serve_forever(
+        stop_timeout=serverconf.get_conf()[FIELD_SERVER_TIMEOUT])
 
 
 if __name__ == "__main__":
