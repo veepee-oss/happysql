@@ -6,6 +6,7 @@ import database_call
 import serverconf
 import benchmark
 import datetime
+from urllib import parse
 from flask import Flask, request, abort, \
     render_template, jsonify, Response
 from flask_apscheduler import APScheduler
@@ -102,15 +103,20 @@ def get_views():
     return call_db(database_call.get_views, None, None)
 
 
-@app.route('/rpc/new', methods=["POST"])
+@app.route('/sp/new', methods=["POST"])
 def add_stored_function():
     """
     Store user defined function
 
     swagger_from_file: doc/view_add.yml
     """
-    args = request.form.to_dict()
-    return call_db(database_call.function_store, None, params)
+    args = parse.unquote(request.data.decode('utf-8')).split("=")
+    logging.debug(args)
+    try:
+        param = {args[0]: args[1]}
+    except:
+        return jsonify({"success": False, "message": "Wrong arguments to post data"})
+    return call_db(database_call.function_store, None, param)
 
 
 @app.route('/<table>/columns', methods=['GET'])
@@ -272,8 +278,8 @@ def run_server():
     http_server = WSGIServer((serverconf.get_conf()[FIELD_IP],
                               serverconf.get_conf()[FIELD_PORT]),
                              app, spawn=pool)
-    http_server.serve_forever(stop_timeout=
-                              serverconf.get_conf()[FIELD_SERVER_TIMEOUT])
+    http_server.serve_forever(
+        stop_timeout=serverconf.get_conf()[FIELD_SERVER_TIMEOUT])
 
 
 if __name__ == "__main__":

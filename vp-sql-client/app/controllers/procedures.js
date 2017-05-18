@@ -7,16 +7,28 @@ controller('proceduresController', ['$scope', '$cookies', '$location', 'callDB',
     $scope.loc = $location.path().replace("/view", "");
     $scope.proc = $scope.loc.replace("/proc/", "");
     $scope.error = "";
-    $scope.datas = [];
+    $scope.data = "";
 
     var token = $cookies.get('token');
     var call = "sp/" + $scope.proc;
     var datasPromise = callDB('GET', call, {'Authorization': token}, {});
     datasPromise.then(function(response) {
-        $scope.datas = response.data[$scope.proc];
+        $scope.data = response.data[$scope.proc][0];
     }, function(error) {
         $scope.error = error;
     });
+
+    $scope.alter = function() {
+	var data = {"query": $scope.data};
+	call = "sp/new";
+	var promise = callDB('POST', call, {'Authorization': token}, data);
+	
+	promise.then(function(response) {
+            Materialize.toast('Update  successful!', 4000);
+	}, function(error) {
+            $scope.error = error;
+	});
+    }
 }]).
 
 controller('allProcsController', ['$scope', '$cookies', 'callDB', function($scope, $cookies, callDB) {

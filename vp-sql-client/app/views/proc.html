@@ -2,16 +2,12 @@
   <h3>Procedure : {{proc}}</h3>
   <p>{{error}}</p>
   <br/>
-  <table class="highlight responsive-table">
-    <thead>
-      <tr>
-	<th>Code</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr ng-repeat="data in datas">
-  	<td> {{data}} </td>
-      </tr>
-    </tbody>
-  </table>
+  <div>
+    <input id="" value="{{data}}" ng-model="data">
+  </div>
+  <div>
+    <button class="btn btn-floating waves-effect waves-light" ng-click="alter()">
+      <i class="material-icons">description</i>
+    </button>
+  </div>
 </div>

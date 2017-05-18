@@ -15,7 +15,7 @@ def get_constraint(cursor, table_name):
         for i in sql_response:
             if i['CONSTRAINT_NAME'].find("PK__") != -1:
                 if i['TABLE_NAME'] == table_name.replace(
-                                i['TABLE_SCHEMA']+ ".", "", 1):
+                                i['TABLE_SCHEMA'] + ".", "", 1):
                     logging.debug(i['COLUMN_NAME'])
                     return i['COLUMN_NAME']
         logging.warn("Primary key not found! Table is in read only mode.")
