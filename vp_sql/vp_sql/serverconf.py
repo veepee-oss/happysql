@@ -87,3 +87,11 @@ def load_server_conf_from_file(args):
 
 def get_conf():
     return SERVER_CONF_DIC
+
+
+def is_debug():
+    return SERVER_CONF_DIC[FIELD_DEBUG]
+
+
+def is_benchmark():
+    return SERVER_CONF_DIC[FIELD_BENCHMARK]

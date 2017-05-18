@@ -24,7 +24,7 @@ COMPRESS_LEVEL = 6
 COMPRESS_MIN_SIZE = 500
 
 app = Flask(__name__)
-CORS(app, supports_credentials=True)
+CORS(app, supports_credentials=True, expose_headers='X-Guid')
 Compress(app)
 
 
@@ -39,11 +39,12 @@ def call_db(db_call, table_name, params):
     guid = database_call.get_constraint(cursor, table_name)
     logging.debug(guid)
     value = db_call(cursor, table_name, params)
-    benchmark.delay_start()     # Benchmarking delay
+    if serverconf.is_benchmark():
+        benchmark.delay_start()     # Benchmarking delay
     co.commit()
-    benchmark.delay_stop()  # Benchmarking delay
+    if serverconf.is_benchmark():
+        benchmark.delay_stop()  # Benchmarking delay
     resp = jsonify(value)
-    resp.headers['Access-Control-Expose-Headers'] = 'X-Guid'
     resp.headers['X-Guid'] = guid
     return resp
 
@@ -222,24 +223,7 @@ def run_server():
     global app
     serverconf.load_server_conf()
 
-    if serverconf.get_conf()[FIELD_BENCHMARK] \
-            and not serverconf.get_conf()[FIELD_DEBUG]:
-        logging.getLogger().setLevel(logging.INFO)
-        formatter = logging.Formatter(
-            '%(asctime)s :: %(levelname)s :: %(message)s',
-            datefmt='%m/%d/%Y %H:%M:%S')
-        file_handler = RotatingFileHandler('logs/benchmark_' +
-                                           datetime.datetime.now().strftime(
-                                               '%Y_%m_%d_%H_%M_%S') + '.log',
-                                           'w')
-        file_handler.setLevel(logging.INFO)
-        file_handler.setFormatter(formatter)
-        logging.getLogger().addHandler(file_handler)
-        steam_handler = logging.StreamHandler()
-        steam_handler.setLevel(logging.INFO)
-        logging.getLogger().addHandler(steam_handler)
-        logging.warn("Benchmark mode enabled!")
-    elif serverconf.get_conf()[FIELD_DEBUG]:
+    if serverconf.is_debug():
         logging.getLogger().setLevel(logging.DEBUG)
         formatter = logging.Formatter(
             '%(asctime)s :: %(levelname)s :: %(message)s',
@@ -255,11 +239,28 @@ def run_server():
         steam_handler.setLevel(logging.DEBUG)
         logging.getLogger().addHandler(steam_handler)
         logging.warn("Debug mode enabled!")
+    elif serverconf.is_benchmark():
+        logging.getLogger().setLevel(logging.INFO)
+        formatter = logging.Formatter(
+            '%(asctime)s :: %(levelname)s :: %(message)s',
+            datefmt='%m/%d/%Y %H:%M:%S')
+        file_handler = RotatingFileHandler('logs/benchmark_' +
+                                           datetime.datetime.now().strftime(
+                                               '%Y_%m_%d_%H_%M_%S') + '.log',
+                                           'w')
+        file_handler.setLevel(logging.INFO)
+        file_handler.setFormatter(formatter)
+        logging.getLogger().addHandler(file_handler)
+        steam_handler = logging.StreamHandler()
+        steam_handler.setLevel(logging.INFO)
+        logging.getLogger().addHandler(steam_handler)
+        logging.warn("Benchmark mode enabled!")
+
     app.config.from_object(Config())
     app.config.from_envvar('FLASKR_SETTINGS', silent=True)
     app.config['JSONIFY_PRETTYPRINT_REGULAR'] = False
 
-    if serverconf.get_conf()[FIELD_DEBUG]:
+    if serverconf.is_debug():
         app.debug = True
 
     cohandler.refresh_secret()
