@@ -1,0 +1,18 @@
+unset multiplot
+set xdata time
+set style data lines
+set term png size 2048,1080
+set timefmt '%m/%d/%Y %H:%M:%S'
+set format x '%H:%M:%S'  
+set xlabel 'Time'
+set ylabel 'Execution time'
+set ytics .01
+set mytics 5
+set yrange [0:0.2]
+set datafile separator ','
+set title 'HappySQL: 1 SELECT 1000 lines + offset 50000 over 10 minutes'
+set output 'C:\Users\Anis Bennabi\Documents\Vente-privée\Git\happysql\vp_sql\benchmarking_tool\graphs\HappySQL_1_SELECT_1000_lines_offset_50000_over_10_minutes.png'
+plot 'C:\Users\Anis Bennabi\Documents\Vente-privée\Git\happysql\vp_sql\benchmarking_tool\csv\benchmark_select_2017_05_18_15_43_23.csv' using 1:3 smooth bezier title "1 SELECT 1000 lines + offset 50000 over 10 minutes"
+
+
+set autoscale y
