@@ -14,13 +14,6 @@ controller('proceduresController', ['$scope', '$cookies', '$location', 'callDB',
     var datasPromise = callDB('GET', call, {'Authorization': token}, {});
     datasPromise.then(function(response) {
         $scope.data = response.data[$scope.proc][0];
-	var a = /CREATE/.exec();
-	console.log(a);
-	console.log(RegExp.$1);
-	// console.log(RegExp.$2);
-	// if (/CREATE PROCEDURE/i.test($scope.data)) {
-	//     console.log("yolo");
-	// }
     }, function(error) {
         $scope.error = error;
     });

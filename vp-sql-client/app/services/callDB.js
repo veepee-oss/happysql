@@ -11,7 +11,6 @@ factory('callDB', ['$http', '$q', '__env', function($http, $q, __env) {
 		$http({
 		    method: method,
 		    url: __env.apiUrl + __env.baseUrl + url,
-		    // url: url,
 		    headers: headers,
 		    data: $.param(data)
 		}).then(function successCallback(response) {
