@@ -103,20 +103,22 @@ def get_views():
     return call_db(database_call.get_views, None, None)
 
 
-@app.route('/sp/new', methods=["POST"])
-def add_stored_function():
-    """
-    Store user defined function
+# ACTIVATE THIS IF YOU KNOW HOW TO EFFICIENTLY PROTECT FROM SQLI
 
-    swagger_from_file: doc/view_add.yml
-    """
-    args = parse.unquote(request.data.decode('utf-8')).split("=")
-    logging.debug(args)
-    try:
-        param = {args[0]: args[1]}
-    except:
-        return jsonify({"success": False, "message": "Wrong arguments to post data"})
-    return call_db(database_call.function_store, None, param)
+# @app.route('/sp/new', methods=["POST"])
+# def add_stored_function():
+#     """
+#     Store user defined function
+
+#     swagger_from_file: doc/view_add.yml
+#     """
+#     args = parse.unquote(request.data.decode('utf-8')).split("=")
+#     logging.debug(args)
+#     try:
+#         param = {args[0]: args[1]}
+#     except Exception as e:
+#         return jsonify({"success": False, "message": e})
+#     return call_db(database_call.store_procedure, None, param)
 
 
 @app.route('/<table>/columns', methods=['GET'])
@@ -159,14 +161,6 @@ def get_procedure_names():
 
     """
     return call_db(database_call.get_stored_procedure_name, None, None)
-    # token = request.headers.get("Authorization")
-    # co, token = cohandler.connect(token=token)
-    # if token is None or co is None:
-    #     abort(500)
-    # cursor = co.cursor()
-    # value = database_call.get_stored_procedure_name(cursor)
-    # co.commit()
-    # return jsonify(value)
 
 
 @app.route('/sp/<sp_name>', methods=['GET'])

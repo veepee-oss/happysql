@@ -277,9 +277,11 @@ def update(cursor, table, params):
     return {"success": True}
 
 
-def function_store(cursor, name, params):
+def store_procedure(cursor, name, params):
+    # PROTECT FROM SQLI !!!!
+    query = params["query"]
     try:
-        cursor.execute(params["query"])
+        cursor.execute(query)
     except Exception as e:
         logging.error(e)
         return {"success": False}
