@@ -13,6 +13,7 @@ parameters:
     in: body
     schema:
       id: Key
+      type: object
       properties:
         Key:
           type: string

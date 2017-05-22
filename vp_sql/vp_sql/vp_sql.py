@@ -190,7 +190,7 @@ def select(table):
 @app.route("/spec")
 def spec():
     swag = swagger(app, from_file_keyword='swagger_from_file')
-    swag['info']['version'] = "0.5"
+    swag['info']['version'] = "0.9"
     swag['info']['title'] = "HappySQL"
     return jsonify(swag)
 

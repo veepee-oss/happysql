@@ -16,6 +16,7 @@ parameters:
     type: string
   - name: newArgs
     in: body
+    type: dict
     schema:
       id: fields
       type: dict

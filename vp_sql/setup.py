@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='HappySQL',
-    version='0.5',
+    version='0.9',
     description='REST API for SQL Server',
     packages=['HappySQL'],
     include_package_data=True,

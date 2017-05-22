@@ -13,6 +13,7 @@ parameters:
     name: body
     schema:
       id: User_defined_functions
+      type: object
       properties:
         arg:
           type: array
