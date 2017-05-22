@@ -41,7 +41,6 @@ controller('nodesController', ['$scope', '$cookies', 'callDB', function($scope, 
 		.on("click", function(d) {
 		    var groupNodes = group._groups[0][0].childNodes;
 		    var nbStartNodes = 2;
-		    // console.log(groupNodes);
 		    if (groupNodes.length > nbStartNodes) {
 			var i = (groupNodes.length - nbStartNodes);
 			for (var j = 0; j < i; ++j) {
@@ -73,8 +72,8 @@ controller('nodesController', ['$scope', '$cookies', 'callDB', function($scope, 
 			    .enter()
 			    .append("svg:circle")
 			    .attr("class", function(d) { if (d.label === guid) { return ("guidNode") } else { return ("tableNode") } })
-			    .attr("cx", function(d) { return d.x; }) // centre en posX = data.x
-			    .attr("cy", function(d) { return d.y; }) // centre en posY = data.y
+			    .attr("cx", function(d) { return d.x; })
+			    .attr("cy", function(d) { return d.y; })
 			    .attr("r", function(d) { return d.r; });
 
 			var newText = group.selectAll("ntxt.ntxt")
