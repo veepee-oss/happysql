@@ -4,13 +4,15 @@
   <br/>
   <table class="highlight responsive-table">
     <thead>
-      <tr>
-	<th>Nom</th>
+      <tr ng-repeat="(key, value) in datas[0]">
+	<th>{{key}}</th>
       </tr>
     </thead>
     <tbody>
       <tr ng-repeat="data in datas">
-  	<td> {{data["Nom"]}} </td>
+  	<td ng-repeat="(key, value) in data">
+	  {{value}}
+	</td>
       </tr>
     </tbody>
   </table>
