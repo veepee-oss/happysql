@@ -15,7 +15,7 @@ token = ""
 def help():
     log.info("+-----------------------------------------+")
     log.info("| CONNECT {user} {pass} {dbname} {server} |")
-    log.info("| GET {table} [Columns,...]            |")
+    log.info("| GET {table} [Columns,...]               |")
     log.info("+-----------------------------------------+")
 
 
