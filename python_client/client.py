@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # coding: utf8
 
@@ -98,7 +98,7 @@ def connect(args):
 def read_until_exit():
     try:
         while True:
-            inp = raw_input("> ")
+            inp = input("> ")
             sent = inp.split()
             if len(sent) == 0 or sent[0] == "EXIT":
                 print("Goodbye !")
