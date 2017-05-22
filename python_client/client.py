@@ -24,11 +24,9 @@ def select_columns(all_columns, json):
         final_line = "|"
         for elem in all_columns:
             try:
-                final_line = final_line + " " + str(line[elem])[:20] + " " *
-                (20 - len(str(line[elem]))) + " |"
+                final_line = final_line + " " + str(line[elem])[:20] + " " * (20 - len(str(line[elem]))) + " |"
             except Exception as e:
-                final_line = final_line + " ERROR" + " " *
-                (20 - len("ERROR")) + " |"
+                final_line = final_line + " ERROR" + " " * (20 - len("ERROR")) + " |"
         log.info(final_line)
 
 
@@ -41,8 +39,7 @@ def select_all(args):
     columns = "|"
     all_columns = []
     for elem in json_columns:
-        columns = columns + " " + elem['COLUMN_NAME'][:20] + " " *
-        (20 - len(elem['COLUMN_NAME'])) + " |"
+        columns = columns + " " + elem['COLUMN_NAME'][:20] + " " * (20 - len(elem['COLUMN_NAME'])) + " |"
         all_columns.append(elem['COLUMN_NAME'])
     log.info(columns)
     log.info("_" * len(columns))
