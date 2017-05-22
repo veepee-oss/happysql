@@ -40,8 +40,10 @@ def check_type(key, params):
     if params[key] == "":
         return ""
     if typename == "int":
+        log.debug("YALA")
         return key + " LIKE " + str(params[key])
     elif typename == "str":
+        log.debug("YOLO")
         return key + " LIKE '" + params[key] + "'"
     return False
 
