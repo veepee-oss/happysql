@@ -1,0 +1,29 @@
+Update field
+---
+tags:
+  - queries
+
+parameters:
+  - name: table
+    in: path
+    description: table you wish to update a line
+    required: true
+    type: string
+  - name: fieldId
+    in: path
+    description: Primary Key of the line tou wish to update
+    required: true
+    type: string
+  - name: newArgs
+    in: body
+    schema:
+      id: fields
+      type: dict
+      required: true
+
+responses:
+  200:
+    headers:
+      Content-Type:
+        type: application/json
+    description: Returns success or error depending on the query result

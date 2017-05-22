@@ -1,0 +1,18 @@
+Get code of Stored Procedure
+---
+tags:
+  - queries
+
+parameters:
+  - name: procedure name
+    in: path
+    description: The name of the procedure you want the code from
+    required: true
+    type: string
+
+responses:
+  200:
+    headers:
+      Content-Type:
+        type: application/json
+    description: Returns success or error depending on the query result

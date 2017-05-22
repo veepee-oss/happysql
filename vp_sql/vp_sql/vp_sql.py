@@ -132,10 +132,11 @@ def get_columns(table):
 
 
 @app.route('/<table>/<fieldId>', methods=['PUT'])
-def update_user(table, fieldId):
+def update(table, fieldId):
     """
     Update query
 
+    swagger_from_file: doc/update.yml
     """
     args = request.form.to_dict()
     logging.debug(fieldId)
@@ -149,6 +150,7 @@ def delete(table):
     """
     Delete query
 
+    swagger_from_file: doc/delete.yml
     """
     args = request.form.to_dict()
     return call_db(database_call.delete, table, args)
@@ -159,6 +161,7 @@ def get_procedure_names():
     """
     Get stored procedure names
 
+    swagger_from_file: doc/procedures.yml
     """
     return call_db(database_call.get_stored_procedure_name, None, None)
 
@@ -168,6 +171,7 @@ def get_procedure_code(sp_name):
     """
     Get stored procedure code
 
+    swagger_from_file: doc/procedure_code.yml
     """
     return call_db(database_call.get_stored_procedure_code, sp_name, None)
 
