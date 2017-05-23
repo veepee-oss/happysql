@@ -8,4 +8,6 @@ responses:
     headers:
       Content-Type:
         type: application/json
-    description: Returns success or error depending on the query result
+    description: Returns an array containing all the names of the procedures
+  500:
+    description: You should reauthenticate

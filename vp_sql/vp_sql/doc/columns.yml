@@ -15,4 +15,6 @@ responses:
     headers:
       Content-Type:
         type: application/json
-    description: Returns success or error depending on the query result
+    description: Returns all the columns in an array
+  500:
+    description: You should reauthenticate
