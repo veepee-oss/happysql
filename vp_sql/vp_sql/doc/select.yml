@@ -27,4 +27,6 @@ responses:
     headers:
       Content-Type:
         type: application/json
-    description: Returns success or error depending on the query result
+    description: Returns an array with all the results of the query
+  500:
+    description: You should reauthenticate
