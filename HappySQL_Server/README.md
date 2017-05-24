@@ -11,7 +11,12 @@ requests into MSSQL requests.
 
 <br/>
 
+## System requirements
+* Debian 8.x Jessie (or any Debian based system)
+
 ## Required packages
-* Python v.3 (version 3.6.1 is recommended but 3.5 should do the trick)
-* Python v.3 PIP
+* Python3 (version 3.6.1 is recommended but 3.5 should do the trick)
+* Python3-pip
+* unixodbc
+* unixodbc-dev
 * ODBC Driver for SQL Server (version 11 or 13)
