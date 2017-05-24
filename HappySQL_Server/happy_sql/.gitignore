@@ -15,7 +15,7 @@ __pycache__/
 # C extensions
 *.so
 *.csv
-logs/*.csv
+logs/*.log
 
 # Distribution / packaging
 .Python

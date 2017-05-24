@@ -2,9 +2,9 @@ from setuptools import setup
 
 setup(
     name='HappySQL',
-    version='0.9',
-    description='REST API for SQL Server',
-    packages=['HappySQL'],
+    version='1.0',
+    description='RESTful API for Microsoft SQL Server',
+    packages=['happy_sql'],
     include_package_data=True,
     install_requires=[
         'flask',
