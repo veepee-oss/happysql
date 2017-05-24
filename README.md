@@ -4,7 +4,7 @@ HappySQL is a RESTful API that allows anyone to perform simple SQL resquests.
 The SQL interpretation is abstacted so any developper can create it's own SQL
 module to fulfill his needs.
 
-  
+
 ## Project Structure
 ### HappySQL_Server
 Core of the project! A Python REST server that implements the API calls and
