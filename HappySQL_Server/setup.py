@@ -4,7 +4,11 @@ setup(
     name='HappySQL',
     version='1.0',
     description='RESTful API for Microsoft SQL Server',
-    packages=['happy_sql'],
+    keywords='vente-privee sql mssql server happysql rest resful api',
+    author=['Anis BENNABI', 'Louis GIESEN'],
+    author_email=['abennabi@vente-privee.com', 'lgiesen@vente-privee.com'],
+    url=['https://git.vpgrp.io/vp-labs/happysql'],
+    packages=['happy_sql', ],
     include_package_data=True,
     install_requires=[
         'flask',

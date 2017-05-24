@@ -1,3 +1,5 @@
-graft vp_sql/templates
-graft vp_sql/static
-include vp_sql/schema.sql
+graft happy_sql/templates
+graft happy_sql/static
+include happy_sql/schema.sql
+include *.md
+
