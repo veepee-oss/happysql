@@ -3,19 +3,21 @@
 .conf/
 .idea/
 static/node_modules/
-1;2802;0c
+logs/*.log
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
+
+
 # Setuptools distribution folder.
 /dist/
 # Python egg metadata, regenerated from source files by setuptools.
 /*.egg-info
 # C extensions
 *.so
-*.csv
-logs/*.log
+
 
 # Distribution / packaging
 .Python
