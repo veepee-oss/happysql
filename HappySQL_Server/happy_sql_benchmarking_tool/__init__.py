@@ -1,3 +1,3 @@
 #!/usr/bin/env python3
 
-import benchmark_parser
+import happy_sql_benchmarking_tool

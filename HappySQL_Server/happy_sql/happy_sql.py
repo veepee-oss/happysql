@@ -1,14 +1,11 @@
 #!/usr/bin/env python3
 
-import logging
-import cohandler
-import database_call
-import serverconf
-import benchmark
 import datetime
-from urllib import parse
-from flask import Flask, request, abort, \
-    render_template, jsonify, Response
+from . import cohandler
+from . import database_call
+from . import serverconf
+from . import benchmark
+from flask import Flask, request, abort, render_template, jsonify
 from flask_apscheduler import APScheduler
 from flask_compress import Compress
 from flask_cors import CORS
@@ -16,8 +13,8 @@ from flask_swagger import swagger
 from gevent.pool import Pool
 from gevent.pywsgi import WSGIServer
 from logging.handlers import RotatingFileHandler
-from serverconf import FIELD_PORT, FIELD_IP, FIELD_MAX_USERS, \
-    FIELD_SERVER_TIMEOUT, FIELD_DEBUG, FIELD_BENCHMARK
+from happy_sql.serverconf import FIELD_PORT, FIELD_IP, FIELD_MAX_USERS, \
+    FIELD_SERVER_TIMEOUT
 
 COMPRESS_MIMETYPES = ['text/html', 'text/css', 'text/xml', 'application/json',
                       'application/javascript']
@@ -197,14 +194,14 @@ def spec():
 
 @app.before_request
 def before_request(resp=None):
-    if serverconf.get_conf()[FIELD_BENCHMARK]:
+    if serverconf.is_benchmark():
         benchmark.benchmark_start()
     return resp
 
 
 @app.after_request
 def after_request(resp=None):
-    if serverconf.get_conf()[FIELD_BENCHMARK]:
+    if serverconf.is_benchmark():
         benchmark.benchmark_stop(request.endpoint)
     return resp
 

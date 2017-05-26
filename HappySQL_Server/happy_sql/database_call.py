@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 
-import serverconf
 import logging
-import benchmark
+from . import serverconf
+from . import benchmark
 from dateutil.parser import parse
 
 

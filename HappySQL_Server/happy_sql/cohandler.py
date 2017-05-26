@@ -2,12 +2,11 @@
 
 import pyodbc
 import logging
-import serverconf
+from . import serverconf
 import jwt
 import secrets
 from datetime import datetime, timedelta
-from serverconf import FIELD_SQL_TIMEOUT, FIELD_SQL_DRIVER,\
-    FIELD_DEBUG, FIELD_BENCHMARK
+from happy_sql.serverconf import FIELD_SQL_TIMEOUT, FIELD_SQL_DRIVER
 
 TOKEN_SERVER = "server"
 TOKEN_DB_NAME = "dbname"
@@ -47,8 +46,7 @@ def check_transaction(params, tok):
 
 def refresh_secret():
     global JWT_SECRET
-    if not serverconf.get_conf()[FIELD_BENCHMARK]:
-        JWT_SECRET = secrets.token_bytes(secrets.choice(range(32, 64)))
+    JWT_SECRET = secrets.token_bytes(secrets.choice(range(32, 64)))
 
 
 def connect(token=None, params=dict()):

@@ -1,6 +1,5 @@
 #Project specific
 *.pyc
-.conf/
 .idea/
 static/node_modules/
 logs/*.log

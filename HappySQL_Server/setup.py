@@ -9,7 +9,6 @@ setup(
     author_email=['abennabi@vente-privee.com', 'lgiesen@vente-privee.com'],
     url=['https://git.vpgrp.io/vp-labs/happysql'],
     packages=['happy_sql', 'happy_sql_benchmarking_tool'],
-    include_package_data=True,
     install_requires=[
         'flask_swagger',
         'flask_compress',
