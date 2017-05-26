@@ -16,6 +16,9 @@ from gevent.pywsgi import WSGIServer
 from logging.handlers import RotatingFileHandler
 from happy_sql.serverconf import FIELD_PORT, FIELD_IP, FIELD_MAX_USERS, \
     FIELD_SERVER_TIMEOUT
+import signal
+import sys
+
 
 COMPRESS_MIMETYPES = ['text/html', 'text/css', 'text/xml', 'application/json',
                       'application/javascript']
@@ -221,9 +224,14 @@ class Config(object):
     SCHEDULER_API_ENABLED = True
 
 
+def signal_handler(signal, frame):
+    sys.exit(0)
+
+
 def run_server():
     global app
     serverconf.load_server_conf()
+    signal.signal(signal.SIGINT, signal_handler)
 
     if serverconf.is_debug():
         logging.getLogger().setLevel(logging.DEBUG)
