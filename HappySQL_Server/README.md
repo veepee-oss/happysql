@@ -7,7 +7,6 @@ requests into MSSQL requests.
 
 ## Supported Databases
 * Microsoft SQL Server (2005, 2008, 2012 & 2016)
-* PostgreSQL
 
 <br/>
 
@@ -56,5 +55,5 @@ happy_sql.run_server()
 
 ### Run our precoded file:
 ```bash
-$ python3 happy_sql_server.py
+$ python3 happy_sql_server.py --help
 ```
