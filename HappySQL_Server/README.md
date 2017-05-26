@@ -35,10 +35,14 @@ requests into MSSQL requests.
 <br/>
 
 ## Install
+### Classic install:
 ```bash
 $ python3 setup.py build
 $ sudo python3 setup.py install
 ```
+#### Pip and Docker install coming soon...
+
+<br/>
 
 ## Usage
 ### Import and run HappySQL in a Python file:
@@ -48,7 +52,7 @@ import happy_sql
 happy_sql.run_server()
 ```
 
-# OR
+### OR
 
 ### Run our precoded file:
 ```bash
