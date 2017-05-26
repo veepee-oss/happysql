@@ -7,7 +7,6 @@ requests into MSSQL requests.
 
 ## Supported Databases
 * Microsoft SQL Server (2005, 2008, 2012 & 2016)
-* PostgreSQL
 
 <br/>
 
