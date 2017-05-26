@@ -1,3 +1,3 @@
 #!/usr/bin/env python3
 
-import happy_sql
+from .happy_sql import *
