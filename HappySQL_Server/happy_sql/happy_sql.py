@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import logging
 import datetime
 from . import cohandler
 from . import database_call
