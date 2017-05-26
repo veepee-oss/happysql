@@ -55,5 +55,5 @@ happy_sql.run_server()
 
 ### Run our precoded file:
 ```bash
-$ python3 happy_sql_server.py
+$ python3 happy_sql_server.py --help
 ```
