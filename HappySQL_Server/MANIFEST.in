@@ -3,3 +3,4 @@ graft happy_sql/static
 include happy_sql/schema.sql
 include *.md
 include node_modules/
+include happy_sql_server.py

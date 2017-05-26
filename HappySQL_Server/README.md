@@ -13,10 +13,44 @@ requests into MSSQL requests.
 
 ## System requirements
 * Debian 8.x Jessie (or any Debian based system)
+* Python version 3.6 or higher
+* Python-pip version 3.6 or higher
 
 ## Required packages
-* Python3 (version 3.6.1 is recommended but 3.5 should do the trick)
-* Python3-pip
 * unixodbc
 * unixodbc-dev
 * ODBC Driver for SQL Server (version 11 or 13)
+
+## Python packages included with HappySQL
+* flask
+* flask_swagger
+* flask_apscheduler
+* flask_compress
+* flask_cors
+* pyodbc
+* gevent
+* PyJWT
+* python-dateutil
+
+<br/>
+
+## Install
+```bash
+$ python3 setup.py build
+$ sudo python3 setup.py install
+```
+
+## Usage
+### Import and run HappySQL in a Python file:
+```python
+import happy_sql
+
+happy_sql.run_server()
+```
+
+# OR
+
+### Run our precoded file:
+```bash
+$ ./happy_sql_server.py
+```
