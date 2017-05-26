@@ -211,7 +211,7 @@ class Config(object):
     JOBS = [
         {
             'id': 'refresh_secret',
-            'func': 'cohandler:refresh_secret',
+            'func': cohandler.refresh_secret,
             'args': (),
             'trigger': 'interval',
             'hours': 1
