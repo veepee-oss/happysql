@@ -7,7 +7,7 @@ module to fulfill his needs.
 <br/>
 
 ## Project Structure
-### * [HappySQL_Server](https://git.vpgrp.io/vp-labs/happysql/tree/master/HappySQL_Server)
+### * [HappySQL_Server](https://github.com/vpcorp/happysql/tree/master/HappySQL_Server)
 Core of the project! A Python REST server that implements the API calls and
 translate them into SQL requests.
 ### * WebApp_Client
