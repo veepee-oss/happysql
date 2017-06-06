@@ -23,8 +23,10 @@ def select_columns(all_columns, json):
         final_line = "|"
         for elem in all_columns:
             try:
-                final_line = final_line + " " + str(line[elem])[:20]
-                + " " * (20 - len(str(line[elem]))) + " |"
+                final_line = final_line + " "
+                final_line = final_line + str(line[elem])[:20]
+                final_line = final_line + " " * (20 - len(str(line[elem])))
+                final_line = final_line + " |"
             except Exception as e:
                 final_line = final_line + " ERROR"
                 + " " * (20 - len("ERROR")) + " |"
@@ -41,7 +43,8 @@ def select_all(args):
     all_columns = []
     for elem in json_columns:
         columns = columns + " " + elem['COLUMN_NAME'][:20]
-        + " " * (20 - len(elem['COLUMN_NAME'])) + " |"
+        columns = columns + " " * (20 - len(elem['COLUMN_NAME']))
+        columns = columns + " |"
         all_columns.append(elem['COLUMN_NAME'])
     print(columns)
     print("_" * len(columns))
@@ -58,7 +61,10 @@ def select_column(args):
     columns = "|"
     url = URL + "/" + args[1] + "?select="
     for elem in all_columns:
-        columns = columns + " " + elem[:20] + " " * (20 - len(elem)) + " |"
+        columns = columns + " "
+        columns = columns + elem[:20]
+        columns = columns + " " * (20 - len(elem))
+        columns = columns + " |"
         url += elem + ","
     print(columns)
     print("_" * len(columns))
