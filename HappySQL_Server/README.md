@@ -39,7 +39,38 @@ requests into MSSQL requests.
 $ python3 setup.py build
 $ sudo python3 setup.py install
 ```
-#### Pip and Docker install coming soon...
+
+#### Docker install
+
+```
+git clone git@git.vpgrp.io:vp-labs/happysql.git
+
+# Builds happysql:dev docker image.
+docker build --tag happysql:dev $(pwd)/happysql/HappySQL_Server/docker
+
+# Enters in happysql:dev container.
+docker run \
+  --hostname happy \
+  --interactive \
+  --tty \
+  --publish 127.0.0.1:8080:8080 \
+  --volume $(pwd)/happysql/HappySQL_Server:/happy-server \
+  happysql:dev \
+  /bin/bash
+```
+
+When in the container, go to `/happy-server` then happy hacking !
+
+Note: If you run the server in the container, it will be available at port
+8080. If you want to change that, please update `--publish` in the docker
+command above and happy server `--port` argument accordingly.
+
+Note: From there, you can follow 'Classic install' steps. Have
+in mind that you will have to re-run 'Classic install' steps every
+time you exit the container. At the moment, we don't provide any
+`virtualenv` environment.
+
+#### Pip install coming soon...
 
 <br/>
 
