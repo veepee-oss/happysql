@@ -11,6 +11,7 @@ from flask_apscheduler import APScheduler
 from flask_compress import Compress
 from flask_cors import CORS
 from flask_swagger import swagger
+import flask_login
 from gevent.pool import Pool
 from gevent.pywsgi import WSGIServer
 from logging.handlers import RotatingFileHandler
@@ -29,6 +30,28 @@ app = Flask(__name__)
 CORS(app, supports_credentials=True, expose_headers='X-Guid')
 Compress(app)
 
+login_manager = flask_login.LoginManager()
+login_manager.init_app(app)
+
+class User(flask_login.UserMixin):
+    pass
+
+"""
+Authorization
+-------------
+
+We decide to intentionally activate user login while not providing
+any mean for an user to actually do it, in order to implement very
+strict read-only run of the happysql server.
+"""
+
+@login_manager.user_loader
+def user_loader(id):
+    return
+
+@login_manager.request_loader
+def request_loader(request):
+    return
 
 # db_call is the function call for database
 def call_db(db_call, table_name, params):
@@ -84,6 +107,7 @@ def get_tables():
 
 
 @app.route('/rpc/<function_name>', methods=['POST'])
+@flask_login.login_required
 def view_call(function_name):
     """
     Call user defined function
@@ -133,6 +157,7 @@ def get_columns(table):
 
 
 @app.route('/<table>/<fieldId>', methods=['PUT'])
+@flask_login.login_required
 def update(table, fieldId):
     """
     Update query
@@ -147,6 +172,7 @@ def update(table, fieldId):
 
 
 @app.route('/<table>', methods=['DELETE'])
+@flask_login.login_required
 def delete(table):
     """
     Delete query
