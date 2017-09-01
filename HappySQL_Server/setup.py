@@ -14,6 +14,7 @@ setup(
         'flask_apscheduler',
         'flask_compress',
         'flask_cors',
+        'flask-login',
         'flask',
         'pyodbc',
         'gevent',
