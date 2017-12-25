@@ -21,3 +21,11 @@ An AngularJS client. HappySQL implementation example.
 ### * Python_Client
 
 A minimalistic Python client. HappySQL implementation example.
+
+## Alternatives
+
+See [automatic-api](https://github.com/dbohdan/automatic-api)
+
+## License
+
+BSD-2-Clause
